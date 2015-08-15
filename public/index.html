@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <base href="/">
+    <title>CTW</title>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css" charset="utf-8"/>
+
+    <!--TODO minimise -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.js"></script>
+    <script src="javascripts/ui.js" type="text/javascript"></script>
+</head>
+<body ng-app="ctw">
+<div id="wrapper">
+    <div id="inner_wrapper">
+
+        <div id="header" class="container">
+            <a href="/#/" class="pure-menu-heading">
+                <h2 id="heading"><span class="heading_first_letter">C</span>alcualte <span
+                        class="heading_first_letter">T</span>he <span class="heading_first_letter">W</span>orld</h2>
+            </a>
+        </div>
+        <div id="middle">
+            <a href class="navigation_button"
+               ng-click="toggleNavigation()"
+               ng-class="{'active':navigation_active}"
+               ng-bind-html="navigation_active ? '&times;':'&equiv;' | safe">
+            </a>
+            <div class="container navigation" ng-class="{'active':navigation_active}">
+                <div class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li ng-repeat="category in categories"
+                            class="pure-menu-item navigation_category">
+                            <ul class="pure-menu-list navigation_category_sub">
+                                <li class="navigation_category_label"
+                                    ng-class="{'navigation_category_label_checked': selected === category}"
+                                    ng-click="select(category)">
+                                    {{category.name}}
+                                </li>
+                                <li class="pure-menu-item navigation_tool" ng-repeat="tool in category.tools"
+                                    ng-show="selected === category">
+                                    <a href ng-click="go(tool.path); hideNavigation()" class="pure-menu-link">{{tool.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container" id="content">
+                <div ng-view></div>
+            </div>
+
+        </div>
+    </div>
+    <div id="footer">
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
+                <a href="/#/about" class="footer_link">Impressum</a>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
+                <a href="" class="footer_link">Ein Link</a>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
+                <a href="" class="footer_link">Ein Link</a>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
+                <a href="" class="footer_link">Ein Link</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

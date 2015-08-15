@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Math",
+    "tools": [
+      {
+        "name": "Multiplier",
+        "path": "Multiplier"
+      },
+      {
+        "name": "Fraction Calculator",
+        "path": "FractionCalculator"
+      },
+      {
+        "name": "Percentage Calculator",
+        "path": "PercentageCalculator"
+      },
+      {
+        "name": "Trigonometry Calculator",
+        "path": "TrigonometryCalculator"
+      }
+    ]
+  },
+  {
+    "name": "Finance",
+    "tools": [
+      {
+        "name": "Investment Calculator",
+        "path": "InvestmentCalculator"
+      },
+      {
+        "name": "Loan Calculator",
+        "path": "LoanCalculator"
+      },
+      {
+        "name": "Mortgage Calculator",
+        "path": "MortgageCalculator"
+      },
+      {
+        "name": "Tip Calculator",
+        "path": "TipCalculator"
+      },
+      {
+        "name": "VAT Calculator",
+        "path": "VATCalculator"
+      }
+    ]
+  },
+  {
+    "name": "Health",
+    "tools": [
+      {
+        "name": "BMI Calculator",
+        "path": "BMICalculator"
+      },
+      {
+        "name": "Body Fat Calculator",
+        "path": "BodyFatCalculator"
+      },
+      {
+        "name": "Calorie Calculator",
+        "path": "CalorieCalculator"
+      },
+      {
+        "name": "Pregnancy Due Date",
+        "path": "PregnancyDueDate"
+      }
+    ]
+  },
+  {
+    "name": "Hobby",
+    "tools": [
+      {
+        "name": "Love Calculator",
+        "path": "LoveCalculator"
+      },
+      {
+        "name": "DOF Calculator",
+        "path": "DOFCalculator"
+      }
+    ]
+  }
+]
