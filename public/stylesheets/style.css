@@ -40,7 +40,7 @@ body {
 }
 
 .heading_first_letter {
-    font-size: 40px;
+    font-size: 1.5em;
 }
 
 #middle {
@@ -100,7 +100,7 @@ body {
     display: table-cell;
     vertical-align: middle;
     text-align: right;
-    font-size: 30px;
+    font-size: 2em;
     padding-right: 10px;
 }
 
@@ -124,7 +124,7 @@ body {
     position: relative;
     float: left;
     display: block;
-    width: 2.3in;
+    width: 200px;
     margin: 5px 10px 5px 5px;
 }
 
@@ -161,10 +161,9 @@ body {
         bottom: 0;
         margin: 0;
         overflow-y: scroll;
-
         position: fixed;
         z-index: 1000;
-        margin-left: -2.4in;
+        margin-left: -205px;
 
         /*TODO das mit der Scrollbarkeit überarbeiten*/
         -webkit-overflow-scrolling: touch;
@@ -174,19 +173,19 @@ body {
         display: block; /* show this only on small screens */
         position: fixed;
         top: 0;
-        height: 1in;
-        width: 1in;
+        width: 1.2em;
+        height: 1.2em;
         text-align: center;
         margin: 5px;
         color: black;
-        font-size: 70px; /* change this value to increase/decrease button size */
+        font-size: 50px; /* change this value to increase/decrease button size */
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
     }
 
     .navigation_button.active {
-        margin-left: 2.3in;
+        margin-left: 200px;
     }
 
     .navigation.active {
@@ -198,12 +197,11 @@ body {
     }
 
     #heading {
-        margin: 0 30px 50px 30px;
-        font-size: 30px;
+        font-size: large;
     }
 
     .heading_first_letter {
-        font-size: 60px;
+        font-size: 1.5em;
     }
 
 }
