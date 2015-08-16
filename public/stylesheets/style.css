@@ -211,5 +211,9 @@ body {
     height: auto;
 }
 
+.pure-u-1 p,h4{
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
 
 
