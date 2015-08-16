@@ -149,7 +149,12 @@ body {
     line-height: 40px;
 }
 
-@media (max-width: 6in) {
+@media (max-width: 1024px) {
+
+    #inner_wrapper {
+        max-width: 100%;
+
+    }
 
     .navigation {
         top: 0;
@@ -172,7 +177,7 @@ body {
         padding: 0 10px;
         margin: 5px;
         color: black;
-        font-size: 40px; /* change this value to increase/decrease button size */
+        font-size: 90px; /* change this value to increase/decrease button size */
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
@@ -211,8 +216,9 @@ body {
     height: auto;
 }
 
-.pure-u-1 p,h4{
+.text p,h4{
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    padding-right: 10px;
 }
 
 
