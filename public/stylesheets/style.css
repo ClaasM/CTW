@@ -179,7 +179,7 @@ body {
         text-align: center;
         margin: 5px;
         color: black;
-        font-size: 60px; /* change this value to increase/decrease button size */
+        font-size: 70px; /* change this value to increase/decrease button size */
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
