@@ -174,10 +174,12 @@ body {
         display: block; /* show this only on small screens */
         position: fixed;
         top: 0;
-        padding: 0 10px;
+        height: 1in;
+        width: 1in;
+        text-align: center;
         margin: 5px;
         color: black;
-        font-size: 90px; /* change this value to increase/decrease button size */
+        font-size: 60px; /* change this value to increase/decrease button size */
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
@@ -197,11 +199,11 @@ body {
 
     #heading {
         margin: 0 30px 50px 30px;
-        font-size: 15px;
+        font-size: 30px;
     }
 
     .heading_first_letter {
-        font-size: 30px;
+        font-size: 60px;
     }
 
 }
