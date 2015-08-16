@@ -1,7 +1,34 @@
 /**
  * Created by Claas on 01.08.2015.
  */
+
+//Stupid IE
+// Avoid `console` errors in browsers that lack a console.
+(function() {
+    var method;
+    var noop = function () {};
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
+
+    while (length--) {
+        method = methods[length];
+
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
+        }
+    }
+}());
+
+
 var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location) {
+
 
     $rootScope.select = function (category) {
         if ($rootScope.selected === category) {
@@ -14,14 +41,14 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
     $rootScope.navigation_active = false; //Provisorisch TODO andere Lösung finden
 
     $rootScope.toggleNavigation = function () {
-            $rootScope.navigation_active = !$rootScope.navigation_active;
+        $rootScope.navigation_active = !$rootScope.navigation_active;
     };
     $rootScope.hideNavigation = function () {
         $rootScope.navigation_active = false;
     };
 
-    $rootScope.go = function ( path ) {
-        $location.path( path );
+    $rootScope.go = function (path) {
+        $location.path(path);
     };
 
     $http.get('./../frontend_tools/tools.json')
@@ -35,7 +62,7 @@ app.controller('contentController', function ($scope, $routeParams) {
 
     $scope.$on('$includeContentError', function (angularEvent, src) {
         console.log("error");
-        $scope.toolUrl = '/html/404.html';
+        $scope.toolUrl = 'html/404.html';
     });
 
     $scope.$on('$includeContentRequested', function (angularEvent, src) {

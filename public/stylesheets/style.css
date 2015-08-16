@@ -180,7 +180,7 @@ body {
         text-align: center;
         margin: 5px;
         color: black;
-        font-size: 50px; /* change this value to increase/decrease button size */
+        font-size: 40px; /* change this value to increase/decrease button size */
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
@@ -199,11 +199,7 @@ body {
     }
 
     #heading {
-        font-size: large;
-    }
-
-    .heading_first_letter {
-        font-size: 1.5em;
+        font-size: 17px;
     }
 
 }

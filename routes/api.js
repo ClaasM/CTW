@@ -17,7 +17,7 @@ router.route('/:name')
         var response;
         try {
             var tool = require("./../backend_tools/javascripts/" + req.params.name);
-            response = tool.calculate(req.body.values);
+            response = tool.calculateFractions(req.body.values);
         } catch (e) {
             response = {
                 result: NaN,

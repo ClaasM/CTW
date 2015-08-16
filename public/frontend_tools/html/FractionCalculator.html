@@ -5,8 +5,9 @@
         $scope.result = 0;
         $scope.error = '';
 
-        $scope.calculate = function () {
-            //Bei API calls kommt die gesamte response vom Server!
+        $scope.calculateFractions = function () {
+
+            //
             if (validate($scope.first, $scope.second)) {
                 $scope.error = "";
                 var result;
@@ -21,62 +22,171 @@
             console.log("Result: " + $scope.first);
         };
 
-        var validate = function (first, second) {
-            //Do Input validations
-            return $scope.first !== undefined && $scope.second !== undefined
-                    && $scope.first !== null && $scope.second !== null;
+        $scope.fractionToDecimal = function () {
+
+        }
+
+        $scope.decimalToFraction = function () {
+
+        }
+
+
+        var validateDecimal = function (decimal) {
+            return true;
+        }
+        var validateFraction = function (numerator, denominator) {
+            //Brüche hier universell validieren
+            return true;
         };
     });
 </script>
 
-<h3>Fraction Calculator</h3>
-<form class="pure-form pure-form-aligned" ng-controller="toolController">
-    <fieldset>
-        <legend>Input the two Factors you want to calculate.</legend>
-        <div class="pure-control-group">
-            <label for="first">First Factor</label>
-            <input id="first" type="number" placeholder="First Factor" ng-model="first">
-        </div>
-        <div class="pure-control-group">
-            <label for="first">Second Factor</label>
-            <input id="second" type="number" placeholder="Second Factor" ng-model="second">
-        </div>
-        <div class="pure-control-group">
-            <label for="result"> Result </label>
-            <span id="result">{{result}}</span>
-        </div>
-        <div class="pure-controls">
-            <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
-            </button>
-        </div>
-    </fieldset>
+<style>
+    .form-cell {
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        width: 10%;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-    <div class="alert" ng-show="error !== ''">
-        <div class="alert_inner">
-            <div class="alert_text">{{error}}</div>
-            <div class="alert_dismiss" ng-click="error = ''">&times;</div>
-        </div>
-    </div>
-</form>
+    .form-cell input{
+        max-width: 100%;
+    }
 
-<div class="pure-g">
-    <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-        </p>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-        </p>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-        </p>
+    .input-form-cell {
+        width: 20%;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*Overriding pure*/
+    .pure-input-1-2 {
+        width: 100% !important;
+    }
+
+</style>
+<!-- Todo Input one and get the other two and use Fraction.js-->
+<h3>Fractions</h3>
+<div ng-controller="toolController">
+    <form class="pure-form">
+        <fieldset>
+            <legend>Fraction Calculator</legend>
+            <div>
+                <div class="form-cell input-form-cell">
+                    <fieldset class="pure-group">
+                        <input type="text" class="pure-input-1-2" placeholder="1">
+                        <input type="text" class="pure-input-1-2" placeholder="2">
+                    </fieldset>
+                </div>
+                <div class="form-cell input-form-cell">
+                    <select id="operator">
+                        <option>+</option>
+                        <option>-</option>
+                        <option>*</option>
+                        <option>/</option>
+                    </select>
+                </div>
+                <div class="form-cell input-form-cell">
+                    <fieldset class="pure-group">
+                        <input type="text" class="pure-input-1-2" placeholder="1">
+                        <input type="text" class="pure-input-1-2" placeholder="2">
+                    </fieldset>
+                </div>
+                <div class="form-cell">
+                    <b>=</b>
+                </div>
+                <div class="form-cell">
+                    <!--TODO bessere darstellungsmethode für Brüche googlen-->
+                    <fieldset class="pure-group">
+                        <input type="text" class="pure-input-1-2" placeholder="1">
+                        <input type="text" class="pure-input-1-2" placeholder="2">
+                    </fieldset>
+                </div>
+            </div>
+            <div class="form-row">
+                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <hr />
+    <form class="pure-form">
+        <fieldset>
+            <legend>Fraction to Decimal</legend>
+            <div>
+                <div class="form-cell input-form-cell">
+                    <fieldset class="pure-group">
+                        <input type="text" class="pure-input-1-2" placeholder="1">
+                        <input type="text" class="pure-input-1-2" placeholder="2">
+                    </fieldset>
+                </div>
+                <div class="form-cell">
+                    <b>=</b>
+                </div>
+                <div class="form-cell">
+                    <!--TODO bessere darstellungsmethode für Ergebnis-->
+                    <input type="text" placeholder="1">
+                </div>
+            </div>
+            <div class="form-row">
+                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <hr />
+    <form class="pure-form">
+        <fieldset>
+            <legend>Decimal to Fraction</legend>
+            <div>
+                <div class="form-cell  input-form-cell">
+                    <!--TODO bessere darstellungsmethode für Ergebnis-->
+                    <input type="text" placeholder="1">
+                </div>
+                <div class="form-cell">
+                    <b>=</b>
+                </div>
+                <div class="form-cell">
+                    <fieldset class="pure-group">
+                        <input type="text" class="pure-input-1-2" placeholder="1">
+                        <input type="text" class="pure-input-1-2" placeholder="2">
+                    </fieldset>
+                </div>
+            </div>
+            <div class="form-row">
+                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-3 text">
+            <h4>Lorem Ipsum</h4>
+
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3 text">
+            <h4>Lorem Ipsum</h4>
+
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-3 text">
+            <h4>Lorem Ipsum</h4>
+
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam.
+            </p>
+        </div>
     </div>
 </div>
+
 
