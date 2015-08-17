@@ -80,7 +80,7 @@ body {
 .alert {
     color: white;
     background-color: #c93c3c;
-    margin: 10px;
+    margin: 10px 0;
 }
 
 .alert_inner {
@@ -175,8 +175,8 @@ body {
         display: block; /* show this only on small screens */
         position: fixed;
         top: 0;
-        width: 1.2em;
-        height: 1.2em;
+        width: 48px;
+        height: 48px;
         text-align: center;
         margin: 5px;
         color: black;
@@ -200,6 +200,8 @@ body {
 
     #heading {
         font-size: 17px;
+        padding: 0 0 0 32px;
+        margin: 0;
     }
 
 }

@@ -2,41 +2,57 @@
     var app = angular.module('ctw');
 
     app.controllerProvider.register('toolController', function ($scope) {
-        $scope.result = 0;
-        $scope.error = '';
+        $scope.first = {
+            denominator_result: 1,
+            numerator_result: 0,
+            operator: '+',
+            error: ''
+        };
+
 
         $scope.calculateFractions = function () {
 
-            //
-            if (validate($scope.first, $scope.second)) {
-                $scope.error = "";
-                var result;
+            if (validateFraction($scope.first.numerator_one, $scope.first.denominator_one)
+                    && validateFraction($scope.first.numerator_two, $scope.first.denominator_two)) {
+                console.log("Validation successful");
+                $scope.first.error = "";
 
-                //Do calculations
-                $scope.result = $scope.first * $scope.second;
+                switch ($scope.first.operator) {
+                    case '+':
+                        //TODO
+                        break;
+                    case '-':
+                        //TODO
+                        break;
+                    case '*':
+                        //TODO
+                        break;
+                    case '/':
+                        //TODO
+                        break;
+                    default:
+                        $scope.first.error = 'Please specify an operator';
+                }
+
 
             } else {
-                $scope.error = "Wrong or missing input.";
+                $scope.first.error = "Wrong or missing Input.";
             }
 
-            console.log("Result: " + $scope.first);
+            console.log("Input: " + $scope.first);
         };
 
-        $scope.fractionToDecimal = function () {
-
-        }
-
-        $scope.decimalToFraction = function () {
+        $scope.convert = function () {
 
         }
 
 
         var validateDecimal = function (decimal) {
-            return true;
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
         }
         var validateFraction = function (numerator, denominator) {
-            //Brüche hier universell validieren
-            return true;
+            return validateDecimal(numerator) && validateDecimal(denominator) && denominator !== 0;
         };
     });
 </script>
@@ -51,12 +67,12 @@
         padding: 0 !important;
     }
 
-    .form-cell input{
+    .form-cell input {
         max-width: 100%;
     }
 
     .input-form-cell {
-        width: 20%;
+        width: 15%;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -76,91 +92,84 @@
             <div>
                 <div class="form-cell input-form-cell">
                     <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="1">
-                        <input type="text" class="pure-input-1-2" placeholder="2">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Numerator"
+                               ng-model="first.numerator_one">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Denominator"
+                               ng-model="first.denominator_one">
                     </fieldset>
                 </div>
                 <div class="form-cell input-form-cell">
-                    <select id="operator">
-                        <option>+</option>
-                        <option>-</option>
-                        <option>*</option>
-                        <option>/</option>
+                    <select ng-model="first.operator">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">*</option>
+                        <option value="/">/</option>
                     </select>
                 </div>
                 <div class="form-cell input-form-cell">
                     <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="1">
-                        <input type="text" class="pure-input-1-2" placeholder="2">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Numerator"
+                               ng-model="first.numerator_two">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Denominator"
+                               ng-model="first.denominator_two">
                     </fieldset>
                 </div>
                 <div class="form-cell">
                     <b>=</b>
                 </div>
                 <div class="form-cell">
-                    <!--TODO bessere darstellungsmethode für Brüche googlen-->
-                    <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="1">
-                        <input type="text" class="pure-input-1-2" placeholder="2">
-                    </fieldset>
+                    <sup>{{first.numerator_result}}</sup>/<sub>{{first.denominator_result}}</sub>
                 </div>
             </div>
-            <div class="form-row">
+            <div>
                 <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
                 </button>
             </div>
+            <div class="alert" ng-show="first.error !== ''">
+                <div class="alert_inner">
+                    <div class="alert_text">{{first.error}}</div>
+                    <div class="alert_dismiss" ng-click="first.error = ''">&times;</div>
+                </div>
+            </div>
         </fieldset>
     </form>
-    <hr />
+    <hr/>
     <form class="pure-form">
         <fieldset>
-            <legend>Fraction to Decimal</legend>
+            <legend>Mixed Fraction to Fraction to Decimal (Input one and click calculate)</legend>
             <div>
                 <div class="form-cell input-form-cell">
+                    <input type="number" step="any" class="pure-input-1-2" placeholder="Decimal">
+                </div>
+                <div class="form-cell input-form-cell">
                     <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="1">
-                        <input type="text" class="pure-input-1-2" placeholder="2">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Numerator">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Denominator">
                     </fieldset>
                 </div>
                 <div class="form-cell">
                     <b>=</b>
                 </div>
+                <div class="form-cell input-form-cell">
+                    <fieldset class="pure-group">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Numerator">
+                        <input type="number" step="any" class="pure-input-1-2" placeholder="Denominator">
+                    </fieldset>
+                </div>
                 <div class="form-cell">
-                    <!--TODO bessere darstellungsmethode für Ergebnis-->
-                    <input type="text" placeholder="1">
+                    <b>=</b>
+                </div>
+                <div class="form-cell input-form-cell">
+                    <input type="number" step="any" placeholder="Decimal">
                 </div>
             </div>
-            <div class="form-row">
-                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
-                </button>
-            </div>
-        </fieldset>
-    </form>
-    <hr />
-    <form class="pure-form">
-        <fieldset>
-            <legend>Decimal to Fraction</legend>
             <div>
-                <div class="form-cell  input-form-cell">
-                    <!--TODO bessere darstellungsmethode für Ergebnis-->
-                    <input type="text" placeholder="1">
-                </div>
-                <div class="form-cell">
-                    <b>=</b>
-                </div>
-                <div class="form-cell">
-                    <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="1">
-                        <input type="text" class="pure-input-1-2" placeholder="2">
-                    </fieldset>
-                </div>
-            </div>
-            <div class="form-row">
-                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
+                <button class="pure-button pure-button-primary" ng-click="convert()">Calculate
                 </button>
             </div>
         </fieldset>
     </form>
+
     <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>Lorem Ipsum</h4>

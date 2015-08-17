@@ -9,7 +9,6 @@
             //Bei API calls kommt die gesamte response vom Server!
             if (validate($scope.first, $scope.second)) {
                 $scope.error = "";
-                var result;
 
                 //Do calculations
                 $scope.result = $scope.first * $scope.second;
@@ -22,9 +21,10 @@
         };
 
         var validate = function (first, second) {
-            //Do Input validations
-            return $scope.first !== undefined && $scope.second !== undefined
-                    && $scope.first !== null && $scope.second !== null;
+            first = parseFloat(first);
+            second = parseFloat(first);
+            return angular.isNumber(first) && isFinite(first)
+                    && angular.isNumber(second) && isFinite(second);
         };
     });
 </script>
@@ -35,11 +35,11 @@
         <legend>Input the two Factors you want to calculate.</legend>
         <div class="pure-control-group">
             <label for="first">First Factor</label>
-            <input id="first" type="number" placeholder="First Factor" ng-model="first">
+            <input id="first" type="number" step="any" placeholder="First Factor" ng-model="first">
         </div>
         <div class="pure-control-group">
             <label for="first">Second Factor</label>
-            <input id="second" type="number" placeholder="Second Factor" ng-model="second">
+            <input id="second" type="number" step="any" placeholder="Second Factor" ng-model="second">
         </div>
         <div class="pure-control-group">
             <label for="result"> Result </label>
