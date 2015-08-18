@@ -39,6 +39,7 @@
  * f.mul([-4, 3]).div(4.9);
  *
  */
+
 (function(root) {
 
     "use strict";

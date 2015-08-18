@@ -143,6 +143,9 @@ app.directive('script', function() {
                     var code = elem.text();
                     s.text = code;
                 }
+
+
+
                 document.head.appendChild(s);
                 elem.remove();
             }
