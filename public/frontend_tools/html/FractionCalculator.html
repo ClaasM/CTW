@@ -5,26 +5,24 @@
 <script type="text/javascript-lazy">
 
     var app = angular.module('ctw');
-
     app.controllerProvider.register('toolController', function ($scope) {
-        var calculatorInitial = {
+        var calculateInitial = {
             error: undefined,
-            first: {n: undefined, d:undefined},
+            first: {n: undefined, d: undefined},
             operator: '+',
-            second: {n: undefined, d:undefined},
-            result: {n: 0, d:1}
+            second: {n: undefined, d: undefined},
+            result: {n: 0, d: 1}
         }
-        $scope.calculate = angular.copy(calculatorInitial);
-        var converterInitial = {
+        $scope.calculate = angular.copy(calculateInitial);
+        var convertInitial = {
             error: undefined,
-            first: {n: undefined, d:undefined, decimal:undefined},
-            second: {n: undefined, d:undefined},
-            third: {decimal:undefined}
+            first: {n: undefined, d: undefined, decimal: undefined},
+            second: {n: undefined, d: undefined},
+            third: {decimal: undefined}
         }
-        $scope.convert = angular.copy(converterInitial);
+        $scope.convert = angular.copy(convertInitial);
 
         $scope.calculateFractions = function () {
-
             if (validateFraction($scope.calculate.first.n, $scope.calculate.first.d)
                     && validateFraction($scope.calculate.second.n, $scope.calculate.second.d)) {
                 $scope.calculate.error = undefined;
@@ -44,17 +42,16 @@
                         fResult = f1.mul(f2);
                         break;
                     case '/':
-                            if(Fraction.divisible(f1,f2)){
-                                fResult = f1.div(f2);
-                            } else {
-                                $scope.calculate.error = 'Not divisible';
-                            }
+                        if (Fraction.divisible(f1, f2)) {
+                            fResult = f1.div(f2);
+                        } else {
+                            $scope.calculate.error = 'Not divisible';
+                        }
                         break;
                     default:
                         $scope.calculate.error = 'Please specify an operator';
                         return;
                 }
-                console.log(fResult);
                 $scope.calculate.result = fResult;
             } else {
                 $scope.calculate.error = "Wrong or missing Input.";
@@ -66,35 +63,29 @@
             scope.error = undefined;
 
             var validInputs = {
-                mixed: validateFraction(scope.first.n,scope.first.d) && validateDecimal(scope.first.decimal),
-                fraction: validateFraction(scope.second.n,scope.second.d),
+                mixed: validateFraction(scope.first.n, scope.first.d) && validateDecimal(scope.first.decimal),
+                fraction: validateFraction(scope.second.n, scope.second.d),
                 decimal: validateDecimal(scope.third.decimal)
             }
 
             if (validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
                 //TODO
-                var mixedFraction = Fraction(scope.first.decimal + " " + scope.first.n + "/" + scope.first.d);
-                scope.second = mixedFraction;
-                scope.third = {decimal: (mixedFraction.n / mixedFraction.d)};
+                var fraction = Fraction(scope.first.decimal + " " + scope.first.n + "/" + scope.first.d);
+                scope.second = fraction;
+                scope.third = {decimal: (fraction.n / fraction.d)};
             } else if (!validInputs.mixed && validInputs.fraction && !validInputs.decimal) {
                 var fraction = Fraction(scope.second.n, scope.second.d);
-                //scope.first =
-                console.log("" + fraction.mod(1).abs()); // Same as: Math.abs(f - parseInt(f, 10));
+                scope.first = toMixedFraction(fraction);
                 scope.third = {decimal: (fraction.n / fraction.d)};
             } else if (!validInputs.mixed && !validInputs.fraction && validInputs.decimal) {
-                //TODO
+                var fraction = Fraction(scope.third.decimal);
+                scope.first = toMixedFraction(fraction);
+                scope.second = fraction;
             } else if (!validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
                 scope.error = 'Wrong or missing Input';
             } else {
                 scope.error = 'Only one Input allowed';
             }
-        }
-
-        $scope.clearConverter = function () {
-            $scope.convert = angular.copy(calculatorInitial);
-        }
-        $scope.clearCalculator = function () {
-            $scope.calculate  = angular.copy(calculatorInitial);
         }
 
         var validateDecimal = function (decimal) {
@@ -104,6 +95,39 @@
         var validateFraction = function (numerator, denominator) {
             return validateDecimal(numerator) && validateDecimal(denominator) && denominator !== 0;
         };
+
+        var toMixedFraction = function (f) {
+            var fractionSplit = f.toFraction().split(" ");
+            if(fractionSplit.length > 1){
+                return {
+                    n: parseFloat(fractionSplit[1].split("/")[0]),
+                    d: parseFloat(fractionSplit[1].split("/")[1]),
+                    decimal: parseFloat(fractionSplit[0])
+                }
+            } else {
+
+                if(fractionSplit[0].split("/").length > 1){
+                    console.log("Constains /");
+                    return {
+                        n: parseFloat(fractionSplit[0].split("/")[0]),
+                        d: parseFloat(fractionSplit[0].split("/")[1])
+                    }
+                } else {
+                    console.log("Not");
+                    return {
+                        decimal: parseFloat(fractionSplit[0])
+                    }
+                }
+            }
+        }
+
+
+        $scope.resetCalculate = function () {
+            $scope.calculate = angular.copy(calculateInitial);
+        }
+        $scope.resetConvert = function () {
+            $scope.convert = angular.copy(convertInitial)
+        }
     });
 </script>
 <style>
@@ -131,7 +155,7 @@
 </style>
 <h3>Fractions</h3>
 <div ng-controller="toolController">
-    <form class="pure-form">
+    <form class="pure-form" novalidate>
         <fieldset>
             <legend>Calculate Fractions</legend>
             <div>
@@ -145,7 +169,7 @@
                 </div>
                 <div class="form-cell wide-form-cell">
                     <select ng-model="calculate.operator">
-                        <option value="+">+</option>
+                        <option value="+" selected>+</option>
                         <option value="-">-</option>
                         <option value="*">*</option>
                         <option value="/">/</option>
@@ -170,7 +194,7 @@
             <div>
                 <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
                 </button>
-                <button class="pure-button pure-button-primary" ng-click="clearCalculator()">Clear
+                <button class="pure-button" type="reset" ng-click="resetCalculate()">Clear
                 </button>
             </div>
             <div class="alert" ng-show="calculate.error !== undefined">
@@ -181,8 +205,7 @@
             </div>
         </fieldset>
     </form>
-    <hr/>
-    <form class="pure-form">
+    <form class="pure-form" novalidate>
         <fieldset>
             <legend>Convert Mixed Fraction to Fraction to Decimal (Input one and click calculate)</legend>
             <div>
@@ -219,7 +242,7 @@
             <div>
                 <button class="pure-button pure-button-primary" ng-click="convertFractions()">Convert
                 </button>
-                <button class="pure-button pure-button-primary" ng-click="clearConverter()">Clear
+                <button class="pure-button" type="reset" ng-click="resetConvert()">Clear
                 </button>
             </div>
             <div class="alert" ng-show="convert.error !== undefined">
@@ -230,7 +253,7 @@
             </div>
         </fieldset>
     </form>
-
+    <hr/>
     <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>Lorem Ipsum</h4>

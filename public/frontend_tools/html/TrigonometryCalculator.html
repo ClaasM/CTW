@@ -1,0 +1,259 @@
+<script type="text/javascript-lazy">
+
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var calculateInitial = {
+            error: undefined,
+            first: {n: undefined, d: undefined},
+            operator: '+',
+            second: {n: undefined, d: undefined},
+            result: {n: 0, d: 1}
+        }
+        $scope.calculate = angular.copy(calculateInitial);
+        var convertInitial = {
+            error: undefined,
+            first: {n: undefined, d: undefined, decimal: undefined},
+            second: {n: undefined, d: undefined},
+            third: {decimal: undefined}
+        }
+        $scope.convert = angular.copy(convertInitial);
+
+        $scope.calculateFractions = function () {
+            if (validateFraction($scope.calculate.first.n, $scope.calculate.first.d)
+                    && validateFraction($scope.calculate.second.n, $scope.calculate.second.d)) {
+                $scope.calculate.error = undefined;
+
+                var f1 = Fraction($scope.calculate.first.n, $scope.calculate.first.d);
+                var f2 = Fraction($scope.calculate.second.n, $scope.calculate.second.d);
+                var fResult;
+
+                switch ($scope.calculate.operator) {
+                    case '+':
+                        fResult = f1.add(f2);
+                        break;
+                    case '-':
+                        fResult = f1.sub(f2);
+                        break;
+                    case '*':
+                        fResult = f1.mul(f2);
+                        break;
+                    case '/':
+                        if (Fraction.divisible(f1, f2)) {
+                            fResult = f1.div(f2);
+                        } else {
+                            $scope.calculate.error = 'Not divisible';
+                        }
+                        break;
+                    default:
+                        $scope.calculate.error = 'Please specify an operator';
+                        return;
+                }
+                $scope.calculate.result = fResult;
+            } else {
+                $scope.calculate.error = "Wrong or missing Input.";
+            }
+        };
+
+        $scope.convertFractions = function () {
+            scope = $scope.convert;
+            scope.error = undefined;
+
+            var validInputs = {
+                mixed: validateFraction(scope.first.n, scope.first.d) && validateDecimal(scope.first.decimal),
+                fraction: validateFraction(scope.second.n, scope.second.d),
+                decimal: validateDecimal(scope.third.decimal)
+            }
+
+            if (validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
+                //TODO
+                var fraction = Fraction(scope.first.decimal + " " + scope.first.n + "/" + scope.first.d);
+                scope.second = fraction;
+                scope.third = {decimal: (fraction.n / fraction.d)};
+            } else if (!validInputs.mixed && validInputs.fraction && !validInputs.decimal) {
+                var fraction = Fraction(scope.second.n, scope.second.d);
+                scope.first = toMixedFraction(fraction);
+                scope.third = {decimal: (fraction.n / fraction.d)};
+            } else if (!validInputs.mixed && !validInputs.fraction && validInputs.decimal) {
+                var fraction = Fraction(scope.third.decimal);
+                scope.first = toMixedFraction(fraction);
+                scope.second = fraction;
+            } else if (!validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
+                scope.error = 'Wrong or missing Input';
+            } else {
+                scope.error = 'Only one Input allowed';
+            }
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+        var validateFraction = function (numerator, denominator) {
+            return validateDecimal(numerator) && validateDecimal(denominator) && denominator !== 0;
+        };
+
+        var toMixedFraction = function (f) {
+            var fractionSplit = f.toFraction().split(" ");
+            if (fractionSplit.length > 1) {
+                return {
+                    n: parseFloat(fractionSplit[1].split("/")[0]),
+                    d: parseFloat(fractionSplit[1].split("/")[1]),
+                    decimal: parseFloat(fractionSplit[0])
+                }
+            } else {
+
+                if (fractionSplit[0].split("/").length > 1) {
+                    console.log("Constains /");
+                    return {
+                        n: parseFloat(fractionSplit[0].split("/")[0]),
+                        d: parseFloat(fractionSplit[0].split("/")[1])
+                    }
+                } else {
+                    console.log("Not");
+                    return {
+                        decimal: parseFloat(fractionSplit[0])
+                    }
+                }
+            }
+        }
+
+
+        $scope.reset = function () {
+            $scope.calculate = angular.copy(calculateInitial);
+        }
+    });
+</script>
+<style>
+    .form-cell {
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        width: 5%;
+    }
+
+    .form-cell input {
+        max-width: 100%;
+    }
+
+    .wide-form-cell {
+        width: 20%;
+        white-space: nowrap;
+    }
+
+    .inline {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .label {
+        width: 50px !important;
+    }
+
+    #form-wrapper {
+        text-align: center;
+    }
+
+    .radio {
+        display: inline-block !important;
+
+    }
+
+
+</style>
+<h3>Trigonometry</h3>
+<div ng-controller="toolController">
+    <div>
+        Visual representation goes here.
+    </div>
+    <div id="form-wrapper">
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Fill out out <b>three</b> fields and click calculate</legend>
+                <div class="inline">
+                    <div class="pure-control-group">
+                        <label for="alpha" class="label">Alpha</label>
+                        <input id="alpha" type="number" step="any" placeholder="alpha" ng-model="alpha"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="beta" class="label">Beta</label>
+                        <input id="beta" type="number" step="any" placeholder="beta" ng-model="beta"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="gamma" class="label">Gamma</label>
+                        <input id="gamma" type="number" step="any" placeholder="gamma" ng-model="gamma"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="area" class="label">Area</label>
+                        <input id="area" type="number" step="any" placeholder="area" ng-model="area"/>
+                    </div>
+                </div>
+                <div class="inline">
+                    <div class="pure-control-group">
+                        <label for="A" class="label">A</label>
+                        <input id="A" type="number" step="any" placeholder="A" ng-model="A"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="B" class="label">B</label>
+                        <input id="B" type="number" step="any" placeholder="B" ng-model="B"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="C" class="label">C</label>
+                        <input id="C" type="number" step="any" placeholder="C" ng-model="C"/>
+                    </div>
+                    <div id="radios">
+                        <label for="option-one" class="radio">
+                            <input id="option-one" type="radio" value="">
+                            Radian
+                        </label>
+                        <label for="option-two" class="radio">
+                            <input id="option-two" type="radio" name="optionsRadios" value="option1" checked>
+                            Degree
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <div class="alert" ng-show="calculate.error !== undefined">
+                    <div class="alert_inner">
+                        <div class="alert_text">{{calculate.error}}</div>
+                        <div class="alert_dismiss" ng-click="calculate.error = undefined">&times;</div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+</div>
+</div>
+
+

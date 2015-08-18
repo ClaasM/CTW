@@ -1,10 +1,9 @@
 <script type="text/javascript-lazy">
 
     var app = angular.module('ctw');
-    var _scope;
 
     app.controllerProvider.register('toolController', function ($scope) {
-        _scope = $scope;
+
         var percentAmountInitial = {
             error: undefined,
             percent: undefined,
@@ -40,7 +39,7 @@
             if (validateDecimal(scope.amount_1)
                     && validateDecimal(scope.amount_2)) {
                 scope.error = undefined;
-                scope.result = scope.amount_1 / scope.amount_2 * 100;
+                scope.result = (scope.amount_1 / scope.amount_2 * 100) + "%";
             } else {
                 scope.error = "Wrong or missing Input.";
             }
@@ -60,29 +59,28 @@
             if (validateDecimal(scope.amount_1)
                     && validateDecimal(scope.amount_2)) {
                 scope.error = undefined;
-                scope.result = (scope.amount_2 - scope.amount_1) / scope.amount_1 * 100;
+                scope.result = ((scope.amount_2 - scope.amount_1) / scope.amount_1 * 100) + "%";
             } else {
                 scope.error = "Wrong or missing Input.";
             }
         };
 
-
-        $scope.clearFirst = function () {
-            $scope.percentOfAmount = angular.copy(percentAmountInitial);
-        }
-        $scope.clearSecond = function () {
-            $scope.amountOfAmount = angular.copy(amountAmountInitial);
-        }
-        $scope.clearThird = function () {
-            $scope.amountOfPercent = angular.copy(percentAmountInitial);
-        }
-        $scope.clearFourth = function () {
-            $scope.percentageChange = angular.copy(amountAmountInitial);
-        }
-
         var validateDecimal = function (decimal) {
             decimal = parseFloat(decimal);
             return angular.isNumber(decimal) && isFinite(decimal);
+        }
+
+        $scope.resetFirst = function () {
+            $scope.percentOfAmount = angular.copy(percentAmountInitial);
+        }
+        $scope.resetSecond = function () {
+            $scope.amountOfAmount = angular.copy(amountAmountInitial);
+        }
+        $scope.resetThird = function () {
+            $scope.amountOfPercent = angular.copy(percentAmountInitial);
+        }
+        $scope.resetFourth = function () {
+            $scope.percentageChange = angular.copy(amountAmountInitial);
         }
     });
 </script>
@@ -106,45 +104,10 @@
         width: 100px;
     }
 
+
 </style>
 <h3>Percentage Calculator</h3>
 <div ng-controller="toolController">
-    <form class="pure-form" onreset="_scope.percentOfAmount.error = undefined; _scope.$apply()" novalidate>
-        <fieldset>
-            <legend>Percent of Amount</legend>
-            <div class="input-form">
-                <div class="input_row">
-                    What is
-                    <input class="input" type="number" step="any" placeholder="Percent"
-                           ng-model="percentOfAmount.percent">
-                    &#37;
-                    <div class="no_break">
-                        of
-                        <input class="input" type="number" step="any" placeholder="Amount"
-                               ng-model="percentOfAmount.amount">
-                        ?
-                    </div>
-                </div>
-                <div class="input_row">
-                    Answer: <input type="number" step="any" placeholder="Answer"
-                                   ng-model="percentOfAmount.result" readonly>
-
-                    <div class="no_break">
-                        <button class="pure-button pure-button-primary" ng-click="calculatePercentOfAmount()">Calculate
-                        </button>
-                        <button class="pure-button pure-button-primary" type="reset">Clear
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="alert" ng-show="percentOfAmount.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{percentOfAmount.error}}</div>
-                    <div class="alert_dismiss" ng-click="percentOfAmount.error = undefined">&times;</div>
-                </div>
-            </div>
-        </fieldset>
-    </form>
     <form class="pure-form" novalidate>
         <fieldset>
             <legend>Percent of Amount</legend>
@@ -168,7 +131,7 @@
                     <div class="no_break">
                         <button class="pure-button pure-button-primary" ng-click="calculatePercentOfAmount()">Calculate
                         </button>
-                        <button class="pure-button pure-button-primary" ng-click="clearFirst()">Clear
+                        <button class="pure-button" type="reset" ng-click="resetFirst()">Clear
                         </button>
                     </div>
                 </div>
@@ -183,79 +146,111 @@
     </form>
     <form class="pure-form" novalidate>
         <fieldset>
-            <legend>Percent of Amount</legend>
+            <legend>Percentage</legend>
             <div class="input-form">
                 <div class="input_row">
-                    What is
-                    <input class="input" type="number" step="any" placeholder="Percent"
-                           ng-model="percentOfAmount.percent">
-                    &#37;
                     <div class="no_break">
-                        of
+
                         <input class="input" type="number" step="any" placeholder="Amount"
-                               ng-model="percentOfAmount.amount">
+                               ng-model="amountOfAmount.amount_1">
+                        is what percent of
+                    </div>
+                    <div class="no_break">
+                        <input class="input" type="number" step="any" placeholder="Amount"
+                               ng-model="amountOfAmount.amount_2">
                         ?
                     </div>
                 </div>
                 <div class="input_row">
-                    Answer: <input type="number" step="any" placeholder="Answer"
-                                   ng-model="percentOfAmount.result" readonly>
+                    Answer: <input step="any" placeholder="Answer"
+                                   ng-model="amountOfAmount.result" readonly>
 
                     <div class="no_break">
-                        <button class="pure-button pure-button-primary" ng-click="calculatePercentOfAmount()">Calculate
+                        <button class="pure-button pure-button-primary" ng-click="calculateAmountOfAmount()">Calculate
                         </button>
-                        <button class="pure-button pure-button-primary" ng-click="clearFirst()">Clear
+                        <button class="pure-button" type="reset" ng-click="resetSecond()">Clear
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="percentOfAmount.error !== undefined">
+            <div class="alert" ng-show="amountOfAmount.error !== undefined">
                 <div class="alert_inner">
-                    <div class="alert_text">{{percentOfAmount.error}}</div>
-                    <div class="alert_dismiss" ng-click="percentOfAmount.error = undefined">&times;</div>
+                    <div class="alert_text">{{amountOfAmount.error}}</div>
+                    <div class="alert_dismiss" ng-click="amountOfAmount.error = undefined">&times;</div>
                 </div>
             </div>
         </fieldset>
     </form>
     <form class="pure-form" novalidate>
         <fieldset>
-            <legend>Percent of Amount</legend>
+            <legend>Total Amount</legend>
             <div class="input-form">
                 <div class="input_row">
-                    What is
-                    <input class="input" type="number" step="any" placeholder="Percent"
-                           ng-model="percentOfAmount.percent">
-                    &#37;
+                    <input class="input" type="number" step="any" placeholder="Amount"
+                           ng-model="amountOfPercent.amount">
+                    is
                     <div class="no_break">
-                        of
-                        <input class="input" type="number" step="any" placeholder="Amount"
-                               ng-model="percentOfAmount.amount">
-                        ?
+                        <input class="input" type="number" step="any" placeholder="Percent"
+                               ng-model="amountOfPercent.percent">
+                        &#37; of what?
                     </div>
                 </div>
                 <div class="input_row">
                     Answer: <input type="number" step="any" placeholder="Answer"
-                                   ng-model="percentOfAmount.result" readonly>
+                                   ng-model="amountOfPercent.result" readonly>
 
                     <div class="no_break">
-                        <button class="pure-button pure-button-primary" ng-click="calculatePercentOfAmount()">Calculate
+                        <button class="pure-button pure-button-primary" ng-click="calculateAmountOfPercent()">Calculate
                         </button>
-                        <button class="pure-button pure-button-primary" ng-click="clearFirst()">Clear
+                        <button class="pure-button" type="reset" ng-click="resetThird()">Clear
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="percentOfAmount.error !== undefined">
+            <div class="alert" ng-show="amountOfPercent.error !== undefined">
                 <div class="alert_inner">
-                    <div class="alert_text">{{percentOfAmount.error}}</div>
-                    <div class="alert_dismiss" ng-click="percentOfAmount.error = undefined">&times;</div>
+                    <div class="alert_text">{{amountOfPercent.error}}</div>
+                    <div class="alert_dismiss" ng-click="amountOfPercent.error = undefined">&times;</div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <form class="pure-form" novalidate>
+        <fieldset>
+            <legend>Percentage Increase or Decrease</legend>
+            <div class="input-form">
+                <div class="input_row">
+                    What is the percentage increase or decrease from
+                    <div class="no_break">
+                        <input class="input" type="number" step="any" placeholder="Amount"
+                               ng-model="percentageChange.amount_1">
+                        to
+                        <input class="input" type="number" step="any" placeholder="Amount"
+                               ng-model="percentageChange.amount_2">
+                        ?
+                    </div>
+                </div>
+                <div class="input_row">
+                    Answer: <input step="any" placeholder="Answer"
+                                   ng-model="percentageChange.result" readonly>
+
+                    <div class="no_break">
+                        <button class="pure-button pure-button-primary" ng-click="calculatePercentageChange()">Calculate
+                        </button>
+                        <button class="pure-button" type="reset" ng-click="resetFourth()">Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="alert" ng-show="percentageChange.error !== undefined">
+                <div class="alert_inner">
+                    <div class="alert_text">{{percentageChange.error}}</div>
+                    <div class="alert_dismiss" ng-click="percentageChange.error = undefined">&times;</div>
                 </div>
             </div>
         </fieldset>
     </form>
     <hr/>
-
-
     <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>Lorem Ipsum</h4>

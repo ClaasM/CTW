@@ -19,7 +19,7 @@ body {
 /*Alles auﬂer der Footer*/
 #inner_wrapper {
     width: 100%;
-    max-width: 10in;
+    max-width: 1024px;
     min-height: 100%;
     margin: auto;
 }
@@ -219,6 +219,10 @@ body {
 .text p,h4{
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
     padding-right: 10px;
+}
+
+legend{
+    font-style: oblique;
 }
 
 
