@@ -1,80 +1,54 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <style>
+        html{
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            color: white;
+        }
+        .outer:below-level(1){
+            color:red;
+        }
 
+        .inner_1{
+            background-color: aquamarine;
+            display: inline-block;
+            width: 400px; /*(For testing)*/
+            color: inherit;
+        }
+
+        .inner_2{
+            background-color: mediumaquamarine;
+            display: inline-block;
+            color: inherit;
+            width: 400px; /*For testing*/
+        }
+
+        .inner_1 + .inner_2 p {
+            border: solid red 1px;
+        }
+
+        /*or Something like this?*/
+        /*inner_1:below{
+            background-color:red;
+        }*/
+
+    </style>
 </head>
 <body>
-<style>
-    #form-outer {
-        display: table;
-
-    }
-
-    .form-row {
-        display: table-row;
-    }
-
-    .form-cell {
-        display: table-cell;
-        vertical-align: middle;
-        text-align: center;
-        width: 10%;
-    }
-    .fraction{
-        width: auto;
-    }
+<div class="outer">
+    <div class="inner_1">
+        <p>This is inner_1. Some Content goes here</p>
+    </div>
+    <div class="inner_2">
+        <p>This should be red if it is <b>below</b> inner_1</p>
+    </div>
+    <form>
+        <input id="test" type="number"/>
+        <button type="submit">Sumit</button>
+    </form>
+</div>
 
 
-    /*Overriding pure*/
-    .pure-input-1-2{
-        width: 100% !important;
-    }
-
-</style>
-
-<h3>Fraction Calculator</h3>
-<form>
-    <fieldset>
-        <legend>Enter the Fractions</legend>
-        <div id="form-outer">
-            <div class="form-row">
-                <div class="form-cell fraction">
-                    <fieldset>
-                        <input type="text" class="pure-input-1-2" placeholder="Username">
-                        <input type="text" class="pure-input-1-2" placeholder="Password">
-                    </fieldset>
-                </div>
-                <div class="form-cell">
-                    <select id="operator">
-                        <option>+</option>
-                        <option>-</option>
-                        <option>*</option>
-                        <option>/</option>
-                    </select>
-                </div>
-                <div class="form-cell fraction">
-                    <fieldset>
-                        <input type="text" class="pure-input-1-2" placeholder="Username">
-                        <input type="text" class="pure-input-1-2" placeholder="Password">
-                    </fieldset>
-                </div>
-                <div class="form-cell">
-                    =
-                </div>
-                <div class="form-cell fraction">
-                    <!--TODO bessere darstellungsmethode für Brüche googlen-->
-                    <fieldset class="pure-group">
-                        <input type="text" class="pure-input-1-2" placeholder="Username">
-                        <input type="text" class="pure-input-1-2" placeholder="Password">
-                    </fieldset>
-                </div>
-            </div>
-            <div class="form-row">
-                <button class="pure-button pure-button-primary" ng-click="calculateFractions()">Calculate
-                </button>
-            </div>
-        </div>
-    </fieldset>
-</form>
 </body>
 </html>

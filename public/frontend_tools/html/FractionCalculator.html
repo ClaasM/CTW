@@ -77,7 +77,10 @@
                 scope.second = mixedFraction;
                 scope.third = {decimal: (mixedFraction.n / mixedFraction.d)};
             } else if (!validInputs.mixed && validInputs.fraction && !validInputs.decimal) {
-                //TODO
+                var fraction = Fraction(scope.second.n, scope.second.d);
+                //scope.first =
+                console.log("" + fraction.mod(1).abs()); // Same as: Math.abs(f - parseInt(f, 10));
+                scope.third = {decimal: (fraction.n / fraction.d)};
             } else if (!validInputs.mixed && !validInputs.fraction && validInputs.decimal) {
                 //TODO
             } else if (!validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
