@@ -1,53 +1,62 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <style>
-        html{
-            font-family: "Trebuchet MS", Helvetica, sans-serif;
-            color: white;
-        }
-        .outer:below-level(1){
-            color:red;
-        }
-
-        .inner_1{
-            background-color: aquamarine;
-            display: inline-block;
-            width: 400px; /*(For testing)*/
-            color: inherit;
-        }
-
-        .inner_2{
-            background-color: mediumaquamarine;
-            display: inline-block;
-            color: inherit;
-            width: 400px; /*For testing*/
-        }
-
-        .inner_1 + .inner_2 p {
-            border: solid red 1px;
-        }
-
-        /*or Something like this?*/
-        /*inner_1:below{
-            background-color:red;
-        }*/
-
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.js"></script>
+    <script src="../javascripts/spielwiese.js"></script>
 </head>
-<body>
-<div class="outer">
-    <div class="inner_1">
-        <p>This is inner_1. Some Content goes here</p>
-    </div>
-    <div class="inner_2">
-        <p>This should be red if it is <b>below</b> inner_1</p>
-    </div>
-    <form>
-        <input id="test" type="number"/>
-        <button type="submit">Sumit</button>
-    </form>
-</div>
+<body ng-app="spielwiese">
+<form class="pure-form pure-form-aligned" novalidate>
+    <fieldset>
+        <legend>Input</legend>
+        <p>
+            <label for="alpha" class="label">Alpha</label>
+            <input id="alpha" type="number" step="any" placeholder="alpha" ng-model="calculate.alpha"/>
+        </p>
+
+        <p>
+            <label for="beta" class="label">Beta</label>
+            <input id="beta" type="number" step="any" placeholder="beta" ng-model="calculate.beta"/>
+        </p>
+
+        <p>
+            <label for="gamma" class="label">Gamma</label>
+            <input id="gamma" type="number" step="any" placeholder="gamma" ng-model="calculate.gamma"/>
+        </p>
+
+        <p>
+            <label for="area" class="label">Area</label>
+            <input id="area" type="number" step="any" placeholder="area" ng-model="calculate.area"/>
+        </p>
+
+        <p>
+            <label for="A" class="label">A</label>
+            <input id="A" type="number" step="any" placeholder="A" ng-model="calculate.A"/>
+        </p>
+
+        <p>
+            <label for="B" class="label">B</label>
+            <input id="B" type="number" step="any" placeholder="B" ng-model="calculate.B"/>
+        </p>
+
+        <p>
+            <label for="C" class="label">C</label>
+            <input id="C" type="number" step="any" placeholder="C" ng-model="calculate.C"/>
+        </p>
+        <div>
+            <button ng-click="calculateTriangle()">Calculate
+            </button>
+            <button type="reset" ng-click="reset()">Clear
+            </button>
+        </div>
+        <div ng-show="calculate.error !== undefined">
+            <div>
+                <div>{{calculate.error}}</div>
+                <div ng-click="calculate.error = undefined">&times;</div>
+            </div>
+        </div>
+    </fieldset>
+</form>
 
 
 </body>

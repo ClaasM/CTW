@@ -1,86 +1,77 @@
 <script type="text/javascript-lazy">
-
     var app = angular.module('ctw');
     app.controllerProvider.register('toolController', function ($scope) {
-        var calculateInitial = {
-            error: undefined,
-            first: {n: undefined, d: undefined},
-            operator: '+',
-            second: {n: undefined, d: undefined},
-            result: {n: 0, d: 1}
+        $scope.triangle = Triangle();
+        $scope.unit = "degree";
+
+        var angleFactor;
+        $scope.calculate = function () {
+            triangle = $scope.triangle;
+            triangle.error = undefined;
+
+            if($scope.unit === "degree"){
+                angleFactor = Math.PI / 180;
+            } else {
+                angleFactor = 1;
+            }
+
+            if (triangle.validate()) {
+                calculateRemainingParameters(triangle);
+            }
         }
-        $scope.calculate = angular.copy(calculateInitial);
-        var convertInitial = {
-            error: undefined,
-            first: {n: undefined, d: undefined, decimal: undefined},
-            second: {n: undefined, d: undefined},
-            third: {decimal: undefined}
+
+        $scope.reset = function () {
+            $scope.unit = "degree";
+            $scope.triangle = Triangle();
         }
-        $scope.convert = angular.copy(convertInitial);
 
-        $scope.calculateFractions = function () {
-            if (validateFraction($scope.calculate.first.n, $scope.calculate.first.d)
-                    && validateFraction($scope.calculate.second.n, $scope.calculate.second.d)) {
-                $scope.calculate.error = undefined;
+        function Triangle() {
+            return {
+                //Counter-Clockwise (The side to the right is the next one)
+                sides: [
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    },
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    },
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    }
 
-                var f1 = Fraction($scope.calculate.first.n, $scope.calculate.first.d);
-                var f2 = Fraction($scope.calculate.second.n, $scope.calculate.second.d);
-                var fResult;
+                ],
+                error: undefined,
 
-                switch ($scope.calculate.operator) {
-                    case '+':
-                        fResult = f1.add(f2);
-                        break;
-                    case '-':
-                        fResult = f1.sub(f2);
-                        break;
-                    case '*':
-                        fResult = f1.mul(f2);
-                        break;
-                    case '/':
-                        if (Fraction.divisible(f1, f2)) {
-                            fResult = f1.div(f2);
-                        } else {
-                            $scope.calculate.error = 'Not divisible';
+                //Clockwise
+                rotate: function (steps) {
+                    this.sides.unshift.apply(this.sides, this.sides.splice(steps, this.sides.length));
+                    return this.sides;
+                },
+                validate: function () {
+                    var angleTotal = 0;
+                    var parameter = 0;
+                    for (var i = 0; i < this.sides.length; i++) {
+                        if (validateDecimal(this.sides[i].edge) && this.sides[i].edge !== 0) {
+                            parameter++;
                         }
-                        break;
-                    default:
-                        $scope.calculate.error = 'Please specify an operator';
-                        return;
+                        if (validateDecimal(this.sides[i].angle) && this.sides[i].angle !== 0) {
+                            parameter++;
+                            angleTotal += (this.sides[i].angle * angleFactor);
+                        }
+                    }
+
+                    if (parameter !== 3) {
+                        this.error = 'You have to provide exactly 3 valid values. Click Clear to clear the form.';
+                        return false;
+                    } else if ((angleTotal > Math.PI)) {
+                        this.error = 'The angles exceed 180 degree (Or ~3.1416 rad). Click Clear to clear the form.';
+                        return false;
+                    }
+                    return true;
                 }
-                $scope.calculate.result = fResult;
-            } else {
-                $scope.calculate.error = "Wrong or missing Input.";
-            }
-        };
-
-        $scope.convertFractions = function () {
-            scope = $scope.convert;
-            scope.error = undefined;
-
-            var validInputs = {
-                mixed: validateFraction(scope.first.n, scope.first.d) && validateDecimal(scope.first.decimal),
-                fraction: validateFraction(scope.second.n, scope.second.d),
-                decimal: validateDecimal(scope.third.decimal)
-            }
-
-            if (validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
-                //TODO
-                var fraction = Fraction(scope.first.decimal + " " + scope.first.n + "/" + scope.first.d);
-                scope.second = fraction;
-                scope.third = {decimal: (fraction.n / fraction.d)};
-            } else if (!validInputs.mixed && validInputs.fraction && !validInputs.decimal) {
-                var fraction = Fraction(scope.second.n, scope.second.d);
-                scope.first = toMixedFraction(fraction);
-                scope.third = {decimal: (fraction.n / fraction.d)};
-            } else if (!validInputs.mixed && !validInputs.fraction && validInputs.decimal) {
-                var fraction = Fraction(scope.third.decimal);
-                scope.first = toMixedFraction(fraction);
-                scope.second = fraction;
-            } else if (!validInputs.mixed && !validInputs.fraction && !validInputs.decimal) {
-                scope.error = 'Wrong or missing Input';
-            } else {
-                scope.error = 'Only one Input allowed';
             }
         }
 
@@ -88,61 +79,235 @@
             decimal = parseFloat(decimal);
             return angular.isNumber(decimal) && isFinite(decimal);
         }
-        var validateFraction = function (numerator, denominator) {
-            return validateDecimal(numerator) && validateDecimal(denominator) && denominator !== 0;
-        };
 
-        var toMixedFraction = function (f) {
-            var fractionSplit = f.toFraction().split(" ");
-            if (fractionSplit.length > 1) {
-                return {
-                    n: parseFloat(fractionSplit[1].split("/")[0]),
-                    d: parseFloat(fractionSplit[1].split("/")[1]),
-                    decimal: parseFloat(fractionSplit[0])
-                }
-            } else {
+        var calculateRemainingParameters = function (triangle) {
 
-                if (fractionSplit[0].split("/").length > 1) {
-                    console.log("Constains /");
-                    return {
-                        n: parseFloat(fractionSplit[0].split("/")[0]),
-                        d: parseFloat(fractionSplit[0].split("/")[1])
-                    }
-                } else {
-                    console.log("Not");
-                    return {
-                        decimal: parseFloat(fractionSplit[0])
-                    }
+            var conditions = [isSAS, isSSS, isASA, isSAA, isAAS, isSSA, isASS];
+            var functions = [fromSAS, fromSSS, fromASA, fromSAA, fromAAS, fromSSA, fromASS];
+
+            //First: Determine what congruency criteria the triangle-object represents
+            var t;
+            for (var i = 0; i < conditions.length; i++) {
+                if ((t = contains(triangle, conditions[i]))) {
+                    functions[i](t);
+                    return;
                 }
             }
-        }
+            triangle.error = "Triangle not constructable."
+        };
 
+        var contains = function (triangle, condition) {
+            t = Triangle();
+            //We need a shallow copy of the initial sides to work with
+            t.sides = triangle.sides.slice();
+            //Rotate clockwise
+            var rotations = 0;
+            while (rotations < 3) {
+                //Test if it forms an SAS beginning from 0
+                if (condition(t)) {
+                    //congruency proven
+                    return t;
+                }
+                //Rotate to the next side
+                t.rotate(1);
+                rotations++;
+            }
+            return false;
+        };
 
-        $scope.reset = function () {
-            $scope.calculate = angular.copy(calculateInitial);
-        }
+        //The following Methods test if the triangle fulfills any of the congruency criteria.
+        var isSAS = function (t) {
+            return t.sides[0].edge && t.sides[2].angle && t.sides[1].edge;
+        };
+        var isSSS = function (t) {
+            return t.sides[0].edge && t.sides[1].edge && t.sides[2].edge
+                    && ((t.sides[0].edge + t.sides[1].edge) > t.sides[2].edge)
+                    && ((t.sides[0].edge + t.sides[2].edge) > t.sides[1].edge)
+                    && ((t.sides[2].edge + t.sides[1].edge) > t.sides[0].edge);
+        };
+        var isASA = function (t) {
+            return t.sides[0].edge && t.sides[1].angle && t.sides[2].angle;
+        };
+        var isSAA = function (t) {
+            //angle to the right of the edge
+            return t.sides[0].edge && t.sides[2].angle && t.sides[0].angle;
+        };
+        var isAAS = function (t) {
+            //Basically the same as SAA but the angle is on the left side of the edge
+            return t.sides[0].edge && t.sides[1].angle && t.sides[0].angle;
+        };
+        var isSSA = function (t) {
+            //This one is a little more complicated
+            return t.sides[0].edge && t.sides[1].edge && t.sides[0].angle;
+        };
+        var isASS = function (t) {
+            //Same as SSA but the longer edge is on the left
+            return t.sides[0].edge && t.sides[2].edge && t.sides[0].angle;
+        };
+
+        //From-functions
+        var fromSAS = function (triangle) {
+            var a = triangle.sides[0].edge;
+            var b = triangle.sides[1].edge;
+            var C = triangle.sides[2].angle;
+
+            var c = locToEdge(a, b, C);
+            //Choose the smaller angle (opposite of the smaller side)
+            if (a < b) {
+                var A = losToAngle(a, c, C);
+                var B = remainingAngle(A, C);
+            } else {
+                var B = losToAngle(b, c, C);
+                var A = remainingAngle(B, C);
+            }
+
+            triangle.sides[2].edge = c;
+            triangle.sides[1].angle = B;
+            triangle.sides[0].angle = A;
+
+            return triangle;
+        };
+        var fromSSS = function (triangle) {
+            var a = triangle.sides[0].edge;
+            var b = triangle.sides[1].edge;
+            var c = triangle.sides[2].edge;
+
+            var A = locToAngle(a, b, c);
+            var B = locToAngle(b, c, a);
+            var C = remainingAngle(A, B);
+
+            triangle.sides[0].angle = A;
+            triangle.sides[1].angle = B;
+            triangle.sides[2].angle = C;
+
+            return triangle;
+        };
+        var fromASA = function (triangle) {
+            var B = triangle.sides[1].angle;
+            var C = triangle.sides[2].angle;
+            var a = triangle.sides[0].edge;
+
+            var A = remainingAngle(B, C);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[0].angle = A;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromSAA = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var C = triangle.sides[2].angle;
+            var a = triangle.sides[0].edge;
+
+            var B = remainingAngle(C, A);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[1].angle = B;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromAAS = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var B = triangle.sides[1].angle;
+            var a = triangle.sides[0].edge;
+
+            var C = remainingAngle(B, A);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[2].angle = C;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromSSA = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var b = triangle.sides[1].edge;
+            var a = triangle.sides[0].edge;
+
+            //First possibility
+            var B_1 = losToAngle(b, a, A);
+            var C_1 = remainingAngle(A, B_1);
+            var c_1 = losToEdge(C_1, a, A);
+
+            //second possibility
+            var B_2 = remainingAngle(B_1, 0);
+            var C_2 = remainingAngle(A, B_2);
+            var c_2 = losToEdge(C_2, a, A);
+
+            if (C_2 > 0 && B_2 > 0 && c_2 > 0) {
+                triangle.sides[2].angle = C_1.toFixed(4) + " or " + C_2.toFixed(4);
+                triangle.sides[1].angle = B_1.toFixed(4) + " or " + B_2.toFixed(4);
+                triangle.sides[2].edge = c_1.toFixed(4) + " or " + c_2.toFixed(4);
+            } else {
+                triangle.sides[2].angle = C_1;
+                triangle.sides[1].angle = B_1;
+                triangle.sides[2].edge = c_1;
+            }
+            return triangle;
+        };
+        var fromASS = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var c = triangle.sides[2].edge;
+            var a = triangle.sides[0].edge;
+
+            //First possibility
+            var C_1 = losToAngle(c, a, A);
+            var B_1 = remainingAngle(A, C_1);
+            var b_1 = losToEdge(B_1, a, A);
+
+            //second possibility
+            var C_2 = remainingAngle(C_1, 0);
+            var B_2 = remainingAngle(A, C_2);
+            var b_2 = losToEdge(B_2, a, A);
+
+            if (C_2 > 0 && B_2 > 0 && b_2 > 0) {
+                triangle.sides[2].angle = C_1.toFixed(4) + " or " + C_2.toFixed(4);
+                triangle.sides[1].angle = B_1.toFixed(4) + " or " + B_2.toFixed(4);
+                triangle.sides[1].edge = b_1.toFixed(4) + " or " + b_2.toFixed(4);
+            } else {
+                triangle.sides[2].angle = C_1;
+                triangle.sides[1].angle = B_1;
+                triangle.sides[1].edge = b_1;
+            }
+            return triangle;
+        };
+
+        //law of sines; returning an angle
+        var losToAngle = function (a, b, B) {
+            return Math.round((Math.asin(Math.sin(B * angleFactor) * a / b) / angleFactor) * 1000) / 1000;
+        };
+        //law of sines; returning an edge
+        var losToEdge = function (A, b, B) {
+            return Math.round((b * Math.sin(A  * angleFactor) / Math.sin(B * angleFactor)) * 1000) / 1000;
+        };
+        //law of cosines; returning an angle
+        var locToAngle = function (a, b, c) {
+            return Math.round((Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c)) / angleFactor) * 1000) / 1000;
+        };
+        //law of cosines; returning an edge
+        var locToEdge = function (a, b, C) {
+            return Math.round((Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) - 2 * a * b * Math.cos(C  * angleFactor))) * 1000) / 1000;
+        };
+        //law of 180 degree in a triangle; returning remaining angle
+        var remainingAngle = function (A, B) {
+            return Math.round(((Math.PI / angleFactor) - A - B) * 1000) / 1000;
+        };
     });
 </script>
 <style>
-    .form-cell {
-        display: inline-block;
-        vertical-align: middle;
-        text-align: center;
-        width: 5%;
-    }
-
-    .form-cell input {
-        max-width: 100%;
-    }
-
-    .wide-form-cell {
-        width: 20%;
-        white-space: nowrap;
-    }
-
     .inline {
+        padding: 10px !important;
         display: inline-block;
         vertical-align: top;
+        text-align: center;
     }
 
     .label {
@@ -155,72 +320,72 @@
 
     .radio {
         display: inline-block !important;
-
     }
 
 
 </style>
 <h3>Trigonometry</h3>
 <div ng-controller="toolController">
-    <div>
-        Visual representation goes here.
-    </div>
     <div id="form-wrapper">
+        <div>
+            <img src="../../media/triangle.png"/>
+        </div>
+
         <form class="pure-form pure-form-aligned" novalidate>
             <fieldset>
-                <legend>Fill out out <b>three</b> fields and click calculate</legend>
-                <div class="inline">
+                <legend>Fill out <b>three</b> fields (at least one edge) and click calculate. (90&#176; or &#126;1.5708
+                    rad for a right angle)
+                </legend>
+                <fieldset class="inline">
+                    <legend>Edges</legend>
                     <div class="pure-control-group">
-                        <label for="alpha" class="label">Alpha</label>
-                        <input id="alpha" type="number" step="any" placeholder="alpha" ng-model="alpha"/>
+                        <label for="_a" class="label">a</label>
+                        <input id="_a" type="number" step="any" placeholder="a" ng-model="triangle.sides[0].edge"/>
                     </div>
                     <div class="pure-control-group">
-                        <label for="beta" class="label">Beta</label>
-                        <input id="beta" type="number" step="any" placeholder="beta" ng-model="beta"/>
+                        <label for="_b" class="label">b</label>
+                        <input id="_b" type="number" step="any" placeholder="b" ng-model="triangle.sides[1].edge"/>
                     </div>
                     <div class="pure-control-group">
-                        <label for="gamma" class="label">Gamma</label>
-                        <input id="gamma" type="number" step="any" placeholder="gamma" ng-model="gamma"/>
+                        <label for="_c" class="label">c</label>
+                        <input id="_c" type="number" step="any" placeholder="c" ng-model="triangle.sides[2].edge"/>
                     </div>
-                    <div class="pure-control-group">
-                        <label for="area" class="label">Area</label>
-                        <input id="area" type="number" step="any" placeholder="area" ng-model="area"/>
-                    </div>
-                </div>
-                <div class="inline">
+                </fieldset>
+                <fieldset class="inline">
+                    <legend>Angles</legend>
                     <div class="pure-control-group">
                         <label for="A" class="label">A</label>
-                        <input id="A" type="number" step="any" placeholder="A" ng-model="A"/>
+                        <input id="A" type="number" step="any" placeholder="A" ng-model="triangle.sides[0].angle"/>
                     </div>
                     <div class="pure-control-group">
                         <label for="B" class="label">B</label>
-                        <input id="B" type="number" step="any" placeholder="B" ng-model="B"/>
+                        <input id="B" type="number" step="any" placeholder="B" ng-model="triangle.sides[1].angle"/>
                     </div>
                     <div class="pure-control-group">
                         <label for="C" class="label">C</label>
-                        <input id="C" type="number" step="any" placeholder="C" ng-model="C"/>
+                        <input id="C" type="number" step="any" placeholder="C" ng-model="triangle.sides[2].angle"/>
                     </div>
                     <div id="radios">
-                        <label for="option-one" class="radio">
-                            <input id="option-one" type="radio" value="">
-                            Radian
-                        </label>
-                        <label for="option-two" class="radio">
-                            <input id="option-two" type="radio" name="optionsRadios" value="option1" checked>
+                        <label for="degree" class="radio">
+                            <input id="degree" type="radio" value="degree" name="degree" ng-model="unit" checked>
                             Degree
                         </label>
+                        <label for="radian" class="radio">
+                            <input id="radian" type="radio" value="radian" name="radian" ng-model="unit">
+                            Radian
+                        </label>
                     </div>
-                </div>
+                </fieldset>
                 <div>
                     <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
                     </button>
                     <button class="pure-button" type="reset" ng-click="reset()">Clear
                     </button>
                 </div>
-                <div class="alert" ng-show="calculate.error !== undefined">
+                <div class="alert" ng-show="triangle.error !== undefined">
                     <div class="alert_inner">
-                        <div class="alert_text">{{calculate.error}}</div>
-                        <div class="alert_dismiss" ng-click="calculate.error = undefined">&times;</div>
+                        <div class="alert_text">{{triangle.error}}</div>
+                        <div class="alert_dismiss" ng-click="triangle.error = undefined">&times;</div>
                     </div>
                 </div>
             </fieldset>
