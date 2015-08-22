@@ -93,6 +93,7 @@ body {
 
 
 .alert_text {
+    text-align: left;
     display: table-cell;
     vertical-align: middle;
     padding: 10px;

@@ -32,10 +32,6 @@
         "path": "LoanCalculator"
       },
       {
-        "name": "Mortgage Calculator",
-        "path": "MortgageCalculator"
-      },
-      {
         "name": "Tip Calculator",
         "path": "TipCalculator"
       },

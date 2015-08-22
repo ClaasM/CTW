@@ -1,0 +1,120 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var initial = {
+            amount: undefined,
+            percentage: undefined,
+            people: undefined,
+
+            result: undefined,
+            error: undefined
+        }
+        $scope.loan = angular.copy(initial);
+        $scope.calculate = function () {
+            var scope = $scope.tip;
+            if (validateDecimal(scope.amount) && validateDecimal(scope.percentage)) {
+                scope.result = {
+                    total: undefined,
+                    tip: undefined,
+                    perPerson: undefined,
+                    tipPerPerson: undefined
+                };
+
+                scope.result.total = (scope.amount + scope.amount * (scope.percentage / 100)).toFixed(2);
+                scope.result.tip = (scope.result.total - scope.amount).toFixed(2);
+
+                if (validateDecimal(scope.people) && scope.people > 1) {
+                    scope.result.perPerson = (scope.result.total / scope.people).toFixed(2);
+                    scope.result.tipPerPerson = ((scope.result.total - scope.amount) / scope.people).toFixed(2);
+                }
+            } else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.tip = angular.copy(initial);
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    #form-wrapper {
+        text-align: center;
+    }
+</style>
+<h3>Tip Calculator</h3>
+<div ng-controller="toolController">
+    <div id="form-wrapper">
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Type in the amount of the Bill and the percentage you want to tip</legend>
+                <div class="pure-control-group">
+                    <label for="amount" class="label">Bill Amount</label>
+                    <input id="amount" type="number" step="any" placeholder="amount"
+                           ng-model="tip.amount"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="percentage" class="label">Tip Percentage</label>
+                    <input id="percentage" type="number" step="any" placeholder="%" ng-model="tip.percentage"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="people" class="label">Number of People</label>
+                    <input id="people" type="number" step="any" placeholder="optional, default is 1"
+                           ng-model="tip.people"/>
+                </div>
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <div class="alert" ng-show="tip.error !== undefined">
+                    <div class="alert_inner">
+                        <div class="alert_text">{{tip.error}}</div>
+                        <div class="alert_dismiss" ng-click="tip.error = undefined">&times;</div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div ng-show="tip.result">
+        <p> Including tip, the bill is <b>{{tip.result.total}}</b><span ng-show="tip.result.perPerson"> or <b>{{tip.result.perPerson}}</b> per Person</span>.
+        </p>
+        <p><b>{{tip.result.tip}}</b> of that is tip</b><span ng-show="tip.result.tipPerPerson"> (or <b>{{tip.result.tipPerPerson}}</b> per Person)</span>.
+        </p>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Keywords</h4>
+
+        <p>
+            Tip Calculator etc.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+</div>
+</div>
+
+

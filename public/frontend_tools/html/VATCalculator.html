@@ -1,0 +1,159 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var initial = {
+            amount: undefined,
+            vat: undefined,
+            include: "include",
+
+            result: undefined,
+            error: undefined
+        }
+
+        $scope.vat = angular.copy(initial);
+        $scope.calculate = function () {
+
+            //Exclude or Add Vat, evtl. dropdown combobox
+            var scope = $scope.vat;
+            if (validateDecimal(scope.amount) && validateDecimal(scope.percentage)) {
+                scope.result = {
+                    gross: undefined,
+                    net: undefined,
+                    vat: undefined
+                };
+
+                if(scope.include === "include"){
+                    scope.result.net = (scope.amount).toFixed(2);
+                    scope.result.vat = (scope.amount * (scope.percentage / 100)).toFixed(2);
+                    scope.result.gross = (scope.amount*1 + scope.result.vat*1).toFixed(2);
+                } else if (scope.include === "exclude"){
+                    scope.result.gross = (scope.amount).toFixed(2);
+                    scope.result.net = (scope.amount / (1 + (scope.percentage / 100))).toFixed(2);
+                    scope.result.vat = (scope.result.gross - scope.result.net).toFixed(2);
+
+                } else {
+                    scope.error = "Please select include or exclude";
+                    return;
+                }
+            } else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.vat = angular.copy(initial);
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    #form-wrapper {
+        text-align: center;
+    }
+    .radio {
+        display: inline-block !important;
+        padding: 10px 0;
+    }
+</style>
+<h3>VAT Calculator</h3>
+<div ng-controller="toolController">
+    <div id="form-wrapper">
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Type in the amount and the VAT and select include or exclude</legend>
+                <div class="pure-control-group">
+                    <label for="amount" class="label">Amount</label>
+                    <input id="amount" type="number" step="any" placeholder="amount"
+                           ng-model="vat.amount"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="terms" class="label">Tax rate</label>
+                    <input id="terms" type="number" step="any" placeholder="%" ng-model="vat.percentage"/>
+                </div>
+                <div id="radios">
+                    <label for="include" class="radio">
+                        <input id="include" type="radio" value="include" name="include" ng-model="vat.include" checked>
+                        include
+                    </label>
+                    <label for="exclude" class="radio">
+                        <input id="exclude" type="radio" value="exclude" name="exclude" ng-model="vat.include">
+                        exclude
+                    </label>
+                </div>
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <div class="alert" ng-show="vat.error !== undefined">
+                    <div class="alert_inner">
+                        <div class="alert_text">{{vat.error}}</div>
+                        <div class="alert_dismiss" ng-click="vat.error = undefined">&times;</div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div ng-show="vat.result">
+        <table class="pure-table">
+            <tr class="pure-table-even">
+                <td>
+                    Net (without VAT):
+                </td>
+                <td>
+                    {{vat.result.net}}
+                </td>
+            </tr>
+            <tr class="pure-table-odd">
+                <td>
+                    VAT:
+                </td>
+                <td>
+                    {{vat.result.vat}}
+                </td>
+            </tr>
+            <tr class="pure-table-even">
+                <td>
+                    Gross (with VAT):
+                </td>
+                <td>
+                    {{vat.result.gross}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Keywords</h4>
+
+        <p>
+            vat tax rate Calculator etc.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+</div>
+</div>
+
+
