@@ -1,0 +1,156 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var initial = {
+            weight: undefined,
+            height: undefined,
+            imperial_feet: undefined,
+            imperial_inches: undefined,
+            age: undefined,
+
+            result: undefined,
+            error: undefined
+        }
+
+        $scope.bmi = angular.copy(initial);
+        $scope.units = "Metric";
+        $scope.calculate = function () {
+
+            var scope = $scope.bmi;
+            scope.error = undefined;
+
+            if (validateDecimal(scope.weight) && (($scope.units === 'Metric' && validateDecimal(scope.height))
+            || ($scope.units === 'Imperial' && (validateDecimal(scope.imperial_feet) || validateDecimal(scope.imperial_inches))))) {
+
+                scope.result = {
+                    bmi: undefined,
+                    weight_difference: undefined,
+                    gain:undefined,
+                    age: undefined
+                };
+
+                if($scope.units === 'Imperial'){
+                    var m = scope.weight * 0.45359237;
+                    var l = (scope.imperial_feet || 0) * 0.3048 + (scope.imperial_inches || 0) * 0.0254;
+                    scope.result.bmi = (m / Math.pow(l,2)).toFixed(1);
+                    scope.result.weight_difference = ((m - 22 * Math.pow(l,2)) / 0.45359237).toFixed(2);
+                } else {
+                    var m = scope.weight;
+                    var l = scope.height / 100;
+                    scope.result.bmi = (m / Math.pow(l,2)).toFixed(1);
+                    scope.result.weight_difference = (m - 22 * Math.pow(l,2)).toFixed(2);
+                    console.log(scope.result.weight_difference);
+                }
+                if(scope.result.weight_difference < 0){
+                    scope.result.weight_difference *= -1;
+                    scope.result.gain = "gain";
+                } else {
+                    scope.result.gain = "lose";
+                }
+                scope.result.age = scope.age;
+            } else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.bmi = angular.copy(initial);
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    .nowrap{
+        white-space: nowrap;
+    }
+</style>
+<h3>BMI Calculator</h3>
+<div ng-controller="toolController">
+    <form class="pure-form pure-form-aligned" novalidate>
+        <fieldset>
+            <legend>Enter your information and click calculate.
+                <a class="nowrap" href="" ng-click="units === 'Imperial' ? units = 'Metric' : units = 'Imperial'; reset()">
+                    {{units === 'Imperial' ? 'Use Metric' : 'Use Imperial'}}
+                </a>
+            </legend>
+            <div class="pure-control-group" ng-show="units === 'Metric'">
+                <label for="height">Height:</label>
+                <input id="height" class="input" type="number" step="any" placeholder="cm"
+                       ng-model="bmi.height">
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height_imperial">Height:</label>
+                <input id="height_imperial" class="imperial_input" type="number" step="any" placeholder="feet"
+                       ng-model="bmi.imperial_feet"/>
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height"></label>
+                <input class="imperial_input" type="number" step="any" placeholder="inches"
+                       ng-model="bmi.imperial_inches"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="weight">Weight:</label>
+                <input id="weight" class="input" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'lbs.':'kg'}}"
+                       ng-model="bmi.weight"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="age">Age: (optional)</label>
+                <input id="age" class="input" type="number" step="any" placeholder="age"
+                       ng-model="bmi.age">
+            </div>
+
+            <button class="pure-button pure-button-primary input" ng-click="calculate()">Calculate
+            </button>
+
+            <button class="pure-button input" type="reset" ng-click="reset()">Clear
+            </button>
+
+
+            <div class="alert" ng-show="bmi.error !== undefined">
+                <div class="alert_inner">
+                    <div class="alert_text">{{bmi.error}}</div>
+                    <div class="alert_dismiss" ng-click="bmi.error = undefined">&times;</div>
+                </div>
+            </div>
+            <div ng-show="bmi.result">
+                <p>Your{{bmi.result.age <= 11?' childs':''}} BMI is <b>{{bmi.result.bmi}}</b></p>
+                <p ng-show="bmi.result.age > 11 || !bmi.result.age">You need to {{bmi.result.gain}} {{bmi.result.weight_difference}}{{units === 'Imperial'?'lbs':'kg'}} to reach a perfect BMI of 22.</p>
+                <p ng-show="bmi.result.age <= 11">To see if your childs BMI is healthy, please visit the <a href="http://www.who.int/childgrowth/standards/bmi_for_age/en/">WHO Website</a>.</p>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Keywords</h4>
+
+        <p>
+            bmi Calculator etc.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Lorem Ipsum</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
+    </div>
+</div>
+</div>
+
+

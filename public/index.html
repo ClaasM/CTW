@@ -43,15 +43,20 @@
                             class="pure-menu-item navigation_category">
                             <ul class="pure-menu-list navigation_category_sub">
                                 <li class="navigation_category_label"
-                                    ng-class="{'navigation_category_label_checked': selected === category}"
-                                    ng-click="select(category)">
+                                    ng-class="{'navigation_category_label_selected': selectedCategory === category}"
+                                    ng-click="selectCategory(category)">
                                     {{category.name}}
                                 </li>
                                 <li class="pure-menu-item navigation_tool" ng-repeat="tool in category.tools"
-                                    ng-show="selected === category">
-                                    <a href ng-click="go(tool.path); hideNavigation()" class="pure-menu-link">{{tool.name}}</a>
+                                    ng-show="selectedCategory === category"
+                                    ng-class="{'navigation_tool_selected': selectedTool === tool}">
+                                    <a href="{{tool.path}}" ng-click="hideNavigation()" class="pure-menu-link">{{tool.name}}</a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="pure-menu-item navigation_category"
+                            ng-class="{'navigation_category_label_selected': selectedCategory === 'feedback'}">
+                            <a href="/#/feedback" ng-click="hideNavigation()" class="pure-menu-link" id="navigation_feedback">Feedback</a>
                         </li>
                     </ul>
                 </div>
@@ -66,18 +71,18 @@
     <div id="footer">
         <div class="pure-g">
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="/#/about" class="footer_link">Impressum</a>
+                <a href="/#/about" class="footer_link">About</a>
             </div>
 
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="" class="footer_link">Ein Link</a>
+                <a href="/#/feedback" class="footer_link">Feedback Form</a>
             </div>
 
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="" class="footer_link">Ein Link</a>
+                <a href="/#/tos" class="footer_link">Terms of Service</a>
             </div>
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="" class="footer_link">Ein Link</a>
+                &copy; 2015 CalculateTheWorld.org
             </div>
         </div>
     </div>

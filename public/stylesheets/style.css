@@ -69,7 +69,8 @@ body {
 }
 
 .footer_link {
-    color: #2d3c4d;
+    color: #707070;
+    text-decoration: none;
 }
 
 .footer_entry {
@@ -128,29 +129,34 @@ body {
     position: relative;
     float: left;
     display: block;
-    width: 200px;
+    width: 215px;
     margin: 5px 10px 5px 5px;
 }
 
 .navigation_category {
     line-height: 40px;
-}
-
-/*Alle Kategorien außer die erste sollen oben eine Border haben*/
-.navigation_category:not(:first-child) {
-    border-top: solid 1px;
+    border-bottom: solid 1px;
 }
 
 .navigation_category_label {
     padding-left: 10px;
 }
 
-.navigation_category_label_checked, .navigation_category_label:hover {
+.navigation_category_label_selected, .navigation_category_label:hover {
     background-color: #e7e7e7;
 }
 
 .navigation_tool {
     line-height: 40px;
+}
+
+.navigation_tool_selected{
+    background-color: #ededed;
+}
+
+#navigation_feedback{
+    color: black;
+    padding-left: 10px;
 }
 
 @media (max-width: 1024px) {
@@ -163,32 +169,29 @@ body {
         top: 0;
         bottom: 0;
         margin: 0;
-        overflow-y: scroll;
         position: fixed;
         z-index: 1000;
-        margin-left: -205px;
+        margin-left: -220px;
 
-        /*TODO das mit der Scrollbarkeit überarbeiten*/
-        -webkit-overflow-scrolling: touch;
     }
 
     .navigation_button {
-        display: block; /* show this only on small screens */
+        display: block;
         position: fixed;
         top: 0;
-        width: 48px;
-        height: 48px;
+        width: 51px;
+        height: 51px;
         text-align: center;
         margin: 5px;
         color: black;
-        font-size: 40px; /* change this value to increase/decrease button size */
+        font-size: 40px;
         z-index: 1000;
         text-decoration: none;
         background-color: rgba(25, 24, 24, 0.46);
     }
 
     .navigation_button.active {
-        margin-left: 200px;
+        margin-left: 215px;
     }
 
     .navigation.active {

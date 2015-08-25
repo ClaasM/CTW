@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var api = require('./routes/api');
+var sendmail = require('./routes/sendmail');
 var app = express();
 
 // view engine setup
@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/api', api);
+app.use('/sendmail', sendmail);
 
 app.all('/*', function(req, res, next) {
     if (path.extname(req.path).length > 0) {

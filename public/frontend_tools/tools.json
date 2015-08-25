@@ -3,10 +3,6 @@
     "name": "Math",
     "tools": [
       {
-        "name": "Multiplier",
-        "path": "Multiplier"
-      },
-      {
         "name": "Fraction Calculator",
         "path": "FractionCalculator"
       },
@@ -17,6 +13,10 @@
       {
         "name": "Trigonometry Calculator",
         "path": "TrigonometryCalculator"
+      },
+      {
+        "name": "Multiplier",
+        "path": "Multiplier"
       }
     ]
   },
@@ -49,29 +49,12 @@
         "path": "BMICalculator"
       },
       {
+        "name": "BMR & Calorie Calculator",
+        "path": "BMRCalculator"
+      },
+      {
         "name": "Body Fat Calculator",
         "path": "BodyFatCalculator"
-      },
-      {
-        "name": "Calorie Calculator",
-        "path": "CalorieCalculator"
-      },
-      {
-        "name": "Pregnancy Due Date",
-        "path": "PregnancyDueDate"
-      }
-    ]
-  },
-  {
-    "name": "Hobby",
-    "tools": [
-      {
-        "name": "Love Calculator",
-        "path": "LoveCalculator"
-      },
-      {
-        "name": "DOF Calculator",
-        "path": "DOFCalculator"
       }
     ]
   }
