@@ -110,12 +110,12 @@
 
             </div>
             <div class="pure-control-group" ng-show="units === 'Metric'">
-                <label for="height">Height:</label>
+                <label for="height">Height (cm)</label>
                 <input id="height" type="number" step="any" placeholder="cm"
                        ng-model="bmr.height">
             </div>
             <div class="pure-control-group" ng-show="units === 'Imperial'">
-                <label for="height_imperial">Height:</label>
+                <label for="height_imperial">Height (ft & in)</label>
                 <input id="height_imperial" type="number" step="any" placeholder="feet"
                        ng-model="bmr.imperial_feet"/>
             </div>
@@ -125,13 +125,13 @@
                        ng-model="bmr.imperial_inches"/>
             </div>
             <div class="pure-control-group">
-                <label for="age">Age:</label>
+                <label for="age">Age</label>
                 <input id="age" type="number" step="any"
                        placeholder="age in years"
                        ng-model="bmr.age">
             </div>
             <div class="pure-control-group">
-                <label for="weight">Weight:</label>
+                <label for="weight">Weight ({{units === 'Imperial'?'lbs':'kg'}})</label>
                 <input id="weight" type="number" step="any"
                        placeholder="{{units === 'Imperial'?'lbs':'kg'}}"
                        ng-model="bmr.weight">

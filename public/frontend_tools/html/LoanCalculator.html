@@ -14,6 +14,7 @@
 
         $scope.calculate = function () {
             var scope = $scope.loan;
+            scope.error = undefined;
 
             if (validateDecimal(scope.amount) && validateDecimal(scope.interest) && validateDecimal(scope.terms) && scope.terms > 0 && scope.amount > 0) {
                 scope.result = {
@@ -82,17 +83,17 @@
             <fieldset>
                 <legend>Fill out the form and click calculate</legend>
                 <div class="pure-control-group">
-                    <label for="amount" class="label">loan amount</label>
+                    <label for="amount" class="label">Loan Amount</label>
                     <input id="amount" type="number" step="any" placeholder="amount"
                            ng-model="loan.amount"/>
                 </div>
                 <div class="pure-control-group">
-                    <label for="interest" class="label">annual interest rate</label>
+                    <label for="interest" class="label">Interest Rate p.a. (&percnt;)</label>
                     <input id="interest" type="number" step="any" placeholder="%" ng-model="loan.interest"/>
                 </div>
                 <!-- TODO Falls die Input width tatsächlich immer 195 px ist den unit selector mit fixer größe neben das term-input feld packen-->
                 <div class="pure-control-group">
-                    <label for="terms" class="label">loan term</label>
+                    <label for="terms" class="label">Loan Term</label>
                     <input id="terms" type="number" step="any" placeholder="term" ng-model="loan.terms"/>
                     <select id="unit" ng-model="loan.unit">
                         <option value="years" selected>Years</option>
@@ -144,7 +145,6 @@
             dolore magna aliqua. Ut enim ad minim veniam.
         </p>
     </div>
-</div>
 </div>
 
 

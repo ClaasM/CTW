@@ -127,12 +127,12 @@
 
             </div>
             <div class="pure-control-group" ng-show="units === 'Metric'">
-                <label for="height">Height:</label>
+                <label for="height">Height (cm)</label>
                 <input id="height" type="number" step="any" placeholder="cm"
                        ng-model="bodyfat.height">
             </div>
             <div class="pure-control-group" ng-show="units === 'Imperial'">
-                <label for="height_imperial">Height:</label>
+                <label for="height_imperial">Height (ft & in)</label>
                 <input id="height_imperial" type="number" step="any" placeholder="feet"
                        ng-model="bodyfat.imperial_feet"/>
             </div>
@@ -142,25 +142,25 @@
                        ng-model="bodyfat.imperial_inches"/>
             </div>
             <div class="pure-control-group">
-                <label for="neck">Neck circumference:</label>
+                <label for="neck">Neck ({{units === 'Imperial'?'inch':'cm'}})</label>
                 <input id="neck" class="input" type="number" step="any"
                        placeholder="{{units === 'Imperial'?'inch':'cm'}}"
                        ng-model="bodyfat.neck"/>
             </div>
             <div class="pure-control-group">
-                <label for="waist">Waist circumference:</label>
+                <label for="waist">Waist ({{units === 'Imperial'?'inch':'cm'}})</label>
                 <input id="waist" type="number" step="any"
                        placeholder="{{units === 'Imperial'?'inch':'cm'}}"
                        ng-model="bodyfat.waist">
             </div>
             <div class="pure-control-group" ng-show="bodyfat.sex === 'female'">
-                <label for="hips">Hips circumference:</label>
+                <label for="hips">Hips ({{units === 'Imperial'?'inch':'cm'}})</label>
                 <input id="hips" type="number" step="any"
                        placeholder="{{units === 'Imperial'?'inch':'cm'}}"
                        ng-model="bodyfat.hips">
             </div>
             <div class="pure-control-group">
-                <label for="weight">Weight (optional):</label>
+                <label for="weight">Weight (optional, {{units === 'Imperial'?'lbs':'kg'}})</label>
                 <input id="weight" type="number" step="any"
                        placeholder="{{units === 'Imperial'?'lbs':'kg'}}"
                        ng-model="bodyfat.weight">
