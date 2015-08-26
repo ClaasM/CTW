@@ -52,6 +52,7 @@
         "name": "BMR & Calorie Calculator",
         "path": "BMRCalculator"
       },
+
       {
         "name": "Body Fat Calculator",
         "path": "BodyFatCalculator"
