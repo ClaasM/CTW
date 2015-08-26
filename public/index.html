@@ -50,7 +50,7 @@
                                 <li class="pure-menu-item navigation_tool" ng-repeat="tool in category.tools"
                                     ng-show="selectedCategory === category"
                                     ng-class="{'navigation_tool_selected': selectedTool === tool}">
-                                    <a href="{{tool.path}}" ng-click="hideNavigation()" class="pure-menu-link">{{tool.name}}</a>
+                                    <a href="/#/{{tool.path}}" ng-click="hideNavigation()" class="pure-menu-link">{{tool.name}}</a>
                                 </li>
                             </ul>
                         </li>
