@@ -26,6 +26,7 @@ app.use(seo({
     cacheClient: 'disk',
     cacheDuration: 60 * 60 * 24 * 1000
 }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/sendmail', sendmail);
 
