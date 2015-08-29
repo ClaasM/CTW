@@ -46,7 +46,9 @@
     "tools": [
       {
         "name": "BMI Calculator",
-        "path": "BMICalculator"
+        "path": "BMICalculator",
+        "description":"Test Test Test",
+        "keywords": "BMI Body Mass Index Calculator"
       },
       {
         "name": "BMR & Calorie Calculator",

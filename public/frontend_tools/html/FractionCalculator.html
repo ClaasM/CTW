@@ -3,9 +3,9 @@
 <!-- fraction.js ist nicht sofort eingebunden (nicht parallel)-->
 <script type="text/javascript-lazy" src="../frontend_tools/javascripts/fraction.js"></script>
 <script type="text/javascript-lazy">
-
     var app = angular.module('ctw');
     app.controllerProvider.register('toolController', function ($scope) {
+
         var calculateInitial = {
             error: undefined,
             first: {n: undefined, d: undefined},
@@ -153,7 +153,7 @@
     }
 
 </style>
-<h1>Fractions</h1>
+<h1>Fraction Calculator & Converter</h1>
 <div ng-controller="toolController">
     <form class="pure-form" novalidate>
         <fieldset>

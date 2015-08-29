@@ -40,13 +40,11 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
     };
 
     $rootScope.selectTool = function (tool) {
-        if ($rootScope.categories && tool) {
-            for (var i = 0; i < $rootScope.categories.length; i++) {
-                for (var j = 0; j < $rootScope.categories[i].tools.length; j++) {
-                    if ($rootScope.categories[i].tools[j].path === tool) {
-                        $rootScope.selectedCategory = $rootScope.categories[i];
-                        $rootScope.selectedTool = $rootScope.categories[i].tools[j];
-                    }
+        for (var i = 0; i < $rootScope.categories.length; i++) {
+            for (var j = 0; j < $rootScope.categories[i].tools.length; j++) {
+                if ($rootScope.categories[i].tools[j].path === tool) {
+                    $rootScope.selectedCategory = $rootScope.categories[i];
+                    $rootScope.selectedTool = $rootScope.categories[i].tools[j];
                 }
             }
         }
@@ -70,25 +68,30 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
 });
 
 
-app.controller('contentController', function ($scope, $routeParams, $rootScope) {
-
+app.controller('contentController', function ($scope, $routeParams, $rootScope, $sce) {
     $scope.$on('$includeContentError', function (angularEvent, src) {
         $scope.toolUrl = 'html/404.html';
     });
     $scope.$on('$includeContentLoaded', function (event, src) {
-        $rootScope.selectTool($routeParams.tool);
+        if ($routeParams.tool && $rootScope.categories) {
+            $rootScope.selectTool($routeParams.tool);
+        }
     });
-
-    $scope.toolUrl = '/frontend_tools/html/' + $routeParams.tool + '.html';
+    if ($routeParams.tool) {
+        $scope.toolUrl = '/frontend_tools/html/' + $routeParams.tool + '.html';
+    } else {
+        $scope.toolUrl = '/html/main.html';
+    }
 });
 
 //Controlls static content
-app.controller('staticController', function ($scope, $rootScope) {
+app.controller('staticController', function ($scope, $rootScope, $sce) {
+
     $rootScope.selectedCategory = undefined;
     $rootScope.selectedTool = undefined;
 });
 
-app.controller('feedbackController', function ($scope, $rootScope, $http) {
+app.controller('feedbackController', function ($scope, $rootScope, $http, $sce) {
     $rootScope.selectedCategory = 'feedback';
     $rootScope.selectedTool = undefined;
 
@@ -108,10 +111,6 @@ app.config(function ($routeProvider, $locationProvider, $controllerProvider) {
     app.controllerProvider = $controllerProvider;
 
     $routeProvider
-        .when('/', {
-            templateUrl: 'html/main.html',
-            controller: 'staticController'
-        })
         .when('/about', {
             templateUrl: 'html/about.html',
             controller: 'staticController'
@@ -124,7 +123,7 @@ app.config(function ($routeProvider, $locationProvider, $controllerProvider) {
             templateUrl: 'html/feedback.html',
             controller: 'feedbackController'
         })
-        .when('/:tool', {
+        .when('/:tool?', {
             templateUrl: 'html/tool_wrapper.html',
             controller: 'contentController'
         })

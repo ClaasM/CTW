@@ -1,11 +1,210 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+
+        var initial = {
+            display: undefined,
+            error: undefined
+        }
+        $scope.calculator = angular.copy(initial);
+        $scope.calculate = function () {
+            var scope = $scope.calculator;
+            scope.error = undefined;
+
+            if (new RegExp('^[0-9\\(\\)\\+\\-\\*\\/\\.\\s]+$').test(scope.display)) {
+                try {
+                    scope.display = eval(scope.display);
+                } catch (e) {
+                    scope.error = 'Cannot calculate';
+                }
+            }
+            else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.calculator = angular.copy(initial);
+        }
+    })
+    ;
+</script>
 <style>
 
+    .calculator{
+        width: 100%;
+        max-width: 500px;
+    }
+    .calculator input {
+        width: 100%;
+        margin-bottom: 0 !important;
+    }
+
+    .calculator button {
+        width: 100%;
+        padding: .5em .5em;
+    }
+    .calculator td {
+        padding: 2px;
+    }
+
+    .calculator .pure-button-primary {
+        height: 100%;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 </style>
+<div ng-controller="toolController">
+    <form class="pure-form" novalidate>
+        <fieldset>
+            <legend>
+                Use the buttons or type into the input field
+            </legend>
 
-<h3>Welcome to YourCalculator.org</h3>
+            <table class="calculator">
+                <tr>
+                    <td colspan="3">
+                        <input id="display" class="input" placeholder="display"
+                               ng-model="calculator.display">
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display.substring(0, calculator.display.length - 1);">&#8592;
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '+'">+
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '-'">-
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '*'">*
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '/'">/
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '7'">7
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '8'">8
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '9'">9
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '('">(
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '4'">4
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '5'">5
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '6'">6
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + ')'">)
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '1'">1
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '2'">2
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '3'">3
+                        </button>
+                    </td>
+                    <td rowspan="2">
+                        <button class="pure-button pure-button-primary" ng-click="calculate()">Enter
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" class="pure-button" type="reset" ng-click="reset()">C
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '0'">0
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="pure-button" ng-click="calculator.display = calculator.display + '.'">.
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="alert" ng-show="calculator.error !== undefined">
+                <div class="alert_inner">
+                    <div class="alert_text">{{calculator.error}}</div>
+                    <div class="alert_dismiss" ng-click="calculator.error = undefined">&times;</div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<hr/>
+
+<h1>Welcome to YourCalculator.org</h1>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How to use this site</h4>
+        <p>You can use the calculator above just like you would use a real calculator by pressing the buttons, or you can click in the display and type your equations using the Keyboard. <br/>
+            If you are looking for a specific calculator, you can check out the calculators in the menu on the left.
+
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Calculators on this site</h4>
+        <p>
+            YourCalculator.org features a lot of calculators for everyday use. Everything from fraction & trigonometry calculators over investment calculators and various health calculators can be found on this site.<br/>
+            Just search in the menu on the left.</p>
+        </p>
+    </div>
+
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Please give feedback & suggestions</h4>
+        <p>
+            Still missing something?<br/>
+            Found a bug or something that can be improved?<br/>
+            Please send me your feeback & suggestions for new calculators over the <a href="/#/feedback">Feedback
+            Form</a>.
+        </p>
+    </div>
+</div>
+</div>
 
 
 
 
-<p>Select the Calculator you are looking for in the menu on the left.</p>
-<p>Missing something? Please send me your suggestions for new calculators over the <a href="/#/feedback">Feedback Form</a>.</p>
+
+
+
+
+
+
+
+
