@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var sendmail = require('./routes/sendmail');
+var seo = require('mean-seo');
 var app = express();
 
 
@@ -14,13 +15,17 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
+
 app.use(favicon(__dirname + '/public/media/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(seo({
+    cacheClient: 'disk',
+    cacheDuration: 60 * 60 * 24 * 1000
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/sendmail', sendmail);
 
