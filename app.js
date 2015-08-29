@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var sendmail = require('./routes/sendmail');
-//var seo = require('mean-seo');
+var seo = require('mean-seo');
 var app = express();
 
 
