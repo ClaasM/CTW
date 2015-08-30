@@ -21,7 +21,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(require('prerender-node').set('prerenderToken', 'VZlNVlkyOi6eaTnm6w81'));
+
+var seojs = require('express-seojs');
+app.use(seojs('5wsigybi9w5fmk0y36bofz250'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/sendmail', sendmail);
