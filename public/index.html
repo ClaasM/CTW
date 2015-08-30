@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=9">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta name="fragment" content="!">
 
     <meta name="keywords" content="{{selectedTool.keywords}}">
@@ -32,7 +31,7 @@
     <div id="inner_wrapper">
 
         <div id="header" class="container">
-            <a href="/#/" id="heading-wrapper">
+            <a href="/" id="heading-wrapper">
                 <h2 id="heading">YourCalculator.org</h2>
             </a>
         </div>
@@ -56,13 +55,13 @@
                                 <li class="pure-menu-item navigation_tool" ng-repeat="tool in category.tools"
                                     ng-show="selectedCategory === category"
                                     ng-class="{'navigation_tool_selected': selectedTool === tool}">
-                                    <a href="/#/{{tool.path}}" ng-click="hideNavigation(); navigatedTo(tool)" class="pure-menu-link">{{tool.name}}</a>
+                                    <a href="{{tool.path}}" ng-click="hideNavigation(); navigatedTo(tool)" class="pure-menu-link">{{tool.name}}</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="pure-menu-item navigation_category"
                             ng-class="{'navigation_category_label_selected': selectedCategory === 'feedback'}">
-                            <a href="/feedback" ng-click="hideNavigation()" class="pure-menu-link" id="navigation_feedback">Feedback</a>
+                            <a href="feedback" ng-click="hideNavigation()" class="pure-menu-link" id="navigation_feedback">Feedback</a>
                         </li>
                     </ul>
                 </div>
@@ -77,15 +76,15 @@
     <div id="footer">
         <div class="pure-g">
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="/about" class="footer_link">About</a>
+                <a href="about" class="footer_link">About</a>
             </div>
 
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="/feedback" class="footer_link">Feedback Form</a>
+                <a href="feedback" class="footer_link">Feedback Form</a>
             </div>
 
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
-                <a href="/tos" class="footer_link">Terms of Service</a>
+                <a href="tos" class="footer_link">Terms of Service</a>
             </div>
             <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-4 footer_entry">
                 &copy; 2015 YourCalculator.org

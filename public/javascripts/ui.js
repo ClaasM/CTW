@@ -132,7 +132,9 @@ app.config(function ($routeProvider, $locationProvider, $controllerProvider) {
             controller: 'staticController'
         });
 
+
     $locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
 });
 
 app.filter('safe', function ($sce) {
