@@ -149,6 +149,8 @@ h2 {
 
 .navigation_category_label {
     padding-left: 10px;
+    cursor: pointer;
+    
 }
 
 .navigation_category_label_selected, .navigation_category_label:hover {

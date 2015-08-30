@@ -8,5 +8,6 @@
     <orderEntry type="library" name="angular" level="application" />
     <orderEntry type="library" name="Node.js v0.12.5 Core Modules" level="application" />
     <orderEntry type="library" name="CTW node_modules" level="project" />
+    <orderEntry type="library" name="angular-route" level="application" />
   </component>
 </module>

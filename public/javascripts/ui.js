@@ -28,8 +28,11 @@
 }());
 
 
-var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location) {
+var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location, $window) {
 
+    $rootScope.$on('$routeChangeSuccess', function () {
+        $window.ga('send', 'pageview', {page: $location.path()});
+    });
 
     $rootScope.selectCategory = function (category) {
         if ($rootScope.selectedCategory === category) {
