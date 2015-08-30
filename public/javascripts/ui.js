@@ -81,6 +81,8 @@ app.controller('contentController', function ($scope, $routeParams, $rootScope, 
         $scope.toolUrl = '/frontend_tools/html/' + $routeParams.tool + '.html';
     } else {
         $scope.toolUrl = '/html/main.html';
+        $rootScope.selectedCategory = undefined;
+        $rootScope.selectedTool = undefined;
     }
 });
 
@@ -160,8 +162,6 @@ app.directive('script', function () {
                     var code = elem.text();
                     s.text = code;
                 }
-
-
                 document.head.appendChild(s);
                 elem.remove();
             }

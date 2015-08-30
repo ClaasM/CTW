@@ -22,11 +22,11 @@
                     vat: undefined
                 };
 
-                if(scope.include === "include"){
+                if (scope.include === "include") {
                     scope.result.net = (scope.amount).toFixed(2);
                     scope.result.vat = (scope.amount * (scope.percentage / 100)).toFixed(2);
-                    scope.result.gross = (scope.amount*1 + scope.result.vat*1).toFixed(2);
-                } else if (scope.include === "exclude"){
+                    scope.result.gross = (scope.amount * 1 + scope.result.vat * 1).toFixed(2);
+                } else if (scope.include === "exclude") {
                     scope.result.gross = (scope.amount).toFixed(2);
                     scope.result.net = (scope.amount / (1 + (scope.percentage / 100))).toFixed(2);
                     scope.result.vat = (scope.result.gross - scope.result.net).toFixed(2);
@@ -54,12 +54,13 @@
     #form-wrapper {
         text-align: center;
     }
+
     .radio {
         display: inline-block !important;
         padding: 10px 0;
     }
 </style>
-<h1>VAT Calculator</h1>
+<h1>VAT & Tax Calculator</h1>
 <div ng-controller="toolController">
     <div id="form-wrapper">
         <form class="pure-form pure-form-aligned" novalidate>
@@ -131,29 +132,33 @@
 <hr/>
 <div class="pure-g">
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Keywords</h4>
+        <h4>How do I use this VAT calculator?</h4>
 
         <p>
-            vat tax rate Calculator etc.
+            Enter the amount of your bill etc., enter the tax rate and choose if you want to get the gross amount
+            (include VAT) or net amount (exclude VAT).<br/>
+            The VAT calculator will then show you the amount of tax or VAT, net and gross amount.
         </p>
     </div>
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
+        <h4>Who should use this calculator?</h4>
 
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam.
+            If you want to work out the net amount from gross or the gross amount from net and you know the tax rate (or
+            VAT) involved, this tax and VAT calculator is the right choice for you.<br/>
+            Please remember that I cannot guarantee 100&percnt; accuracy.
         </p>
     </div>
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
+        <h4>About this calculator</h4>
 
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam.
+            This tax rate calculator uses the formulas presented on <a href="https://en.wikipedia.org/wiki/Tax_rate">Wikipedia</a>
+            to calculate the net, gross and tax amount.
+            The tax rate describes the ration, expressed in percent, at which is business or individual is taxed. These
+            rates can be presented using different definitions applied to a tax base: inclusive and exclusive.
         </p>
     </div>
-</div>
 </div>
 
 

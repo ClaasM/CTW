@@ -93,7 +93,7 @@
                     return;
                 }
             }
-            triangle.error = "Triangle not constructable."
+            triangle.error = "Invalid inputs: No triangle can be generated."
         };
 
         var contains = function (triangle, condition) {
@@ -328,16 +328,16 @@
 <div ng-controller="toolController">
     <div id="form-wrapper">
         <div>
-            <img src="../../media/triangle.png" alt="triangle with angles and edges marked with letters"/>
+            <img src="../../media/triangle.png" alt="triangle with angles and lengths marked with letters"/>
         </div>
 
         <form class="pure-form pure-form-aligned" novalidate>
             <fieldset>
-                <legend>Fill out <b>three</b> fields (at least one edge) and click calculate. (90&#176; or &#126;1.5708
+                <legend>Fill out <b>three</b> fields (at least one length) and click calculate. (90&#176; or &#126;1.5708
                     rad for a right angle)
                 </legend>
                 <fieldset class="inline">
-                    <legend>Edges</legend>
+                    <legend>Lengths</legend>
                     <div class="pure-control-group">
                         <label for="_a" class="label">a</label>
                         <input id="_a" type="number" step="any" placeholder="a" ng-model="triangle.sides[0].edge"/>
@@ -395,30 +395,35 @@
 <hr/>
 <div class="pure-g">
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-
+        <h4>How do I use this trigonometry calculator?</h4>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam.
+            Enter at least three values, of which as least one is an length (the lowercase letters, because if there is no length then there is no way of determining the size of the triangle) and click calculate.<br/>
+            If a valid triangle can be generated, the Trig solver will calculate the rest of the variables, which will be shown in the input fields. If no triangle can be generated, an error message will be shown.<br/>
+            If you want to calculate a right triangle, just enter a right angle and to other values (again, one of them has to be an length).<br/>
+            If you have no length and only two angles, just input a random length (e.g. 1) to calculate the third angle.<br/>
+            If you want to use radians instead of degrees, just select radians.
         </p>
     </div>
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-
+        <h4>About this trigonometry calculator</h4>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam.
+            Trigonometric calculations can be hard and time consuming.<br/>
+            This site solves that problem by providing a simple, easy to use trig (short for triangle or trigonometric) solver (or calculator).<br/>
+            It supports all valid combinations of parameters (lengths and angles) out of which a triangle can be generated and uses the
+            law of cosines, law of sines and the law of 180 degrees in a triangle to calculate the remaining parameters.<br/>
+            And, no matter how many calculations you do and how many triangles you solve, it will always stay free.
         </p>
     </div>
     <div class="pure-u-1 pure-u-md-1-3 text">
-        <h4>Lorem Ipsum</h4>
-
+        <h4>About trigonometry</h4>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam.
+            Trigonometry (from Greek trigonon, "triangle" and metron, "measure") is a branch of mathematics that studies relationships involving lengths and angles of triangles.<br/>
+            The field emerged in the Hellenistic world during the 3rd century BC from applications of geometry to astronomical studies.<br/>
+            Trigonometry is most simply associated with planar right-angle triangles (each of which is a two-dimensional triangle with one angle equal to 90 degrees).
+            The applicability to non-right-angle triangles exists, but, since any non-right-angle triangle (on a flat plane) can be bisected to create two right-angle triangles, most problems can be reduced to calculations on right-angle triangles.<br/>
+            Source: <a href="https://en.wikipedia.org/wiki/Fraction_(mathematics)">Wikipedia</a>
         </p>
     </div>
-</div>
 </div>
 
 
