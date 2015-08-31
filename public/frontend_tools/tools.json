@@ -22,7 +22,10 @@
       },
       {
         "name": "Multiplier",
-        "path": "Multiplier"
+        "path": "Multiplier",
+        "description":"Multiply numbers (factors) and calculate their result with the Multiplier at YourCalculator.org!",
+        "keywords": "calculator multiplier multiplication factor"
+
       }
     ]
   },
