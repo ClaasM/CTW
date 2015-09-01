@@ -29,6 +29,8 @@
 
 
 var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location, $window) {
+    //TODO ans ende des scripts verlegen wenn fertig
+
 
     $rootScope.$on('$routeChangeSuccess', function () {
         $window.ga('send', 'pageview', {page: $location.path()});
@@ -148,7 +150,6 @@ app.filter('safe', function ($sce) {
     };
 });
 
-
 app.directive('script', function () {
     return {
         restrict: 'E',
@@ -172,9 +173,44 @@ app.directive('script', function () {
     };
 });
 
+app.directive('sharebar', function ($location, $http, $rootScope) {
+    return {
+        restrict: 'E',
+        replace: 'true',
+        templateUrl: "../directives/sharebar.html",
+        link: function (scope, elem, attrs) {
+            scope.shareUrl = encodeURIComponent($location.absUrl().replace("http://", "").replace("https://", ""));
+            scope.shareText =  encodeURIComponent($rootScope.selectedTool.description);
+            $http({
+                method: 'GET',
+                url: 'https://api.facebook.com/method/links.getStats?urls=' + scope.shareUrl + '&format=json'
+            }).success(function (data) {
+                if (data[0]) {
+                    scope.fbShareCount = data[0].share_count;
+                }
+            });
+            $http({
+                method: 'GET',
+                url: 'twitter/' + scope.shareUrl
+            }).success(function (data) {
+                scope.tweetCount = data;
+            });
 
+            $http({
+                method: 'GET',
+                url: 'gplus/' + scope.shareUrl
+            }).success(function (data) {
+                scope.gplusShareCount = data;
+            });
+        }
+    };
+});
 
-
-
-
-
+app.directive('alert', function ($location, $http, $rootScope) {
+    return {
+        restrict: 'E',
+        replace: 'true',
+        scope: { myContext: '='},
+        templateUrl: "../directives/alert.html"
+    };
+});

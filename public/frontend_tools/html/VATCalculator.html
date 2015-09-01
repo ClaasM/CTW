@@ -60,6 +60,7 @@
         padding: 10px 0;
     }
 </style>
+<sharebar></sharebar>
 <h1>VAT & Tax Calculator</h1>
 <div ng-controller="toolController">
     <div id="form-wrapper">
@@ -91,12 +92,7 @@
                     <button class="pure-button" type="reset" ng-click="reset()">Clear
                     </button>
                 </div>
-                <div class="alert" ng-show="vat.error !== undefined">
-                    <div class="alert_inner">
-                        <div class="alert_text">{{vat.error}}</div>
-                        <div class="alert_dismiss" ng-click="vat.error = undefined">&times;</div>
-                    </div>
-                </div>
+                <alert my-context="vat"></alert>
             </fieldset>
         </form>
     </div>

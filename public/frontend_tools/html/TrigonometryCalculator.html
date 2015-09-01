@@ -324,6 +324,7 @@
 
 
 </style>
+<sharebar></sharebar>
 <h1>Trigonometry Calculator</h1>
 <div ng-controller="toolController">
     <div id="form-wrapper">
@@ -382,12 +383,7 @@
                     <button class="pure-button" type="reset" ng-click="reset()">Clear
                     </button>
                 </div>
-                <div class="alert" ng-show="triangle.error !== undefined">
-                    <div class="alert_inner">
-                        <div class="alert_text">{{triangle.error}}</div>
-                        <div class="alert_dismiss" ng-click="triangle.error = undefined">&times;</div>
-                    </div>
-                </div>
+                <alert my-context="triangle"></alert>
             </fieldset>
         </form>
     </div>

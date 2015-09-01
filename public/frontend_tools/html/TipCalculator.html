@@ -47,6 +47,7 @@
         text-align: center;
     }
 </style>
+<sharebar></sharebar>
 <h1>Tip Calculator</h1>
 <div ng-controller="toolController">
     <div id="form-wrapper">
@@ -73,12 +74,7 @@
                     <button class="pure-button" type="reset" ng-click="reset()">Clear
                     </button>
                 </div>
-                <div class="alert" ng-show="tip.error !== undefined">
-                    <div class="alert_inner">
-                        <div class="alert_text">{{tip.error}}</div>
-                        <div class="alert_dismiss" ng-click="tip.error = undefined">&times;</div>
-                    </div>
-                </div>
+                <alert my-context="tip"></alert>
             </fieldset>
         </form>
     </div>

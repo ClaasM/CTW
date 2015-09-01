@@ -60,6 +60,7 @@
         text-align: center;
     }
 </style>
+<sharebar></sharebar>
 <h1>Investment & Savings Calculator</h1>
 <div ng-controller="toolController">
     <div id="form-wrapper">
@@ -99,12 +100,7 @@
                     <button class="pure-button" type="reset" ng-click="reset()">Clear
                     </button>
                 </div>
-                <div class="alert" ng-show="investment.error !== undefined">
-                    <div class="alert_inner">
-                        <div class="alert_text">{{investment.error}}</div>
-                        <div class="alert_dismiss" ng-click="investment.error = undefined">&times;</div>
-                    </div>
-                </div>
+                <alert my-context="investment"></alert>
             </fieldset>
         </form>
     </div>

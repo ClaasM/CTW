@@ -1,31 +1,27 @@
 <script type="text/javascript-lazy">
     var app = angular.module('ctw');
     app.controllerProvider.register('toolController', function ($scope, $rootScope) {
-        $rootScope.title = document.getElementsByTagName('h1')[0].innerHTML;
+        var initial = {
+            first: undefined,
+            second: undefined,
 
-        $scope.result = 0;
-        $scope.error = undefined;
+            result: undefined,
+            error: undefined
+        }
+        $scope.multiplier = angular.copy(initial);
 
         $scope.calculate = function () {
-
-            if (validate($scope.first, $scope.second)) {
-                $scope.error = undefined;
-
-                //Do calculations
-                $scope.result = $scope.first * $scope.second;
-
+            var scope = $scope.multiplier;
+            if (validate(scope.first, scope.second)) {
+                scope.error = undefined;
+                scope.result = scope.first * scope.second;
             } else {
-                $scope.error = "Wrong or missing input.";
+                scope.error = "Wrong or missing input.";
             }
-
-            console.log("Result: " + $scope.first);
         };
 
         $scope.reset = function () {
-            $scope.result = 0;
-            $scope.error = undefined;
-            $scope.first = undefined;
-            $scope.second = undefined;
+            $scope.multiplier = angular.copy(initial);
         }
 
         var validate = function (first, second) {
@@ -36,7 +32,7 @@
         };
     });
 </script>
-
+<sharebar></sharebar>
 <h1>Multiplier</h1>
 <div ng-controller="toolController">
     <form class="pure-form pure-form-aligned" novalidate>
@@ -44,15 +40,15 @@
             <legend>Input the two Factors you want to calculate.</legend>
             <div class="pure-control-group">
                 <label for="first">First Factor:</label>
-                <input id="first" type="number" step="any" placeholder="First Factor" ng-model="first">
+                <input id="first" type="number" step="any" placeholder="First Factor" ng-model="multiplier.first">
             </div>
             <div class="pure-control-group">
                 <label for="first">Second Factor:</label>
-                <input id="second" type="number" step="any" placeholder="Second Factor" ng-model="second">
+                <input id="second" type="number" step="any" placeholder="Second Factor" ng-model="multiplier.second">
             </div>
             <div class="pure-control-group">
                 <label for="result">Result: </label>
-                <span id="result">{{result}}</span>
+                <span id="result">{{multiplier.result}}</span>
             </div>
             <div class="pure-controls">
                 <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
@@ -61,13 +57,7 @@
                 </button>
             </div>
         </fieldset>
-
-        <div class="alert" ng-show="error !== undefined">
-            <div class="alert_inner">
-                <div class="alert_text">{{error}}</div>
-                <div class="alert_dismiss" ng-click="error = undefined">&times;</div>
-            </div>
-        </div>
+        <alert my-context="multiplier"></alert>
     </form>
 </div>
 <hr/>

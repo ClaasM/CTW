@@ -82,7 +82,8 @@
         white-space: nowrap;
     }
 </style>
-<h1>BMR &amp; Calorie Calculator</h1>
+<sharebar></sharebar>
+<h1>BMR & Calorie Calculator</h1>
 <div ng-controller="toolController">
     <form class="pure-form pure-form-aligned" novalidate>
         <fieldset>
@@ -141,14 +142,7 @@
             </button>
             <button class="pure-button" type="reset" ng-click="reset()">Clear
             </button>
-
-
-            <div class="alert" ng-show="bmr.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{bmr.error}}</div>
-                    <div class="alert_dismiss" ng-click="bmr.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="bmr"></alert>
             <div ng-show="bmr.result">
                 <p>Your Body needs <b>{{bmr.result.kilocalories}} Kilocalories</b> or {{bmr.result.kilojoules}}
                     Kilojoule a day to maintain your weight.</p>

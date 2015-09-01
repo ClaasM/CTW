@@ -106,6 +106,7 @@
 
 
 </style>
+<sharebar></sharebar>
 <h1>Percentage Calculator</h1>
 <div ng-controller="toolController">
     <form class="pure-form" novalidate>
@@ -136,12 +137,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="percentOfAmount.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{percentOfAmount.error}}</div>
-                    <div class="alert_dismiss" ng-click="percentOfAmount.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="percentOfAmount"></alert>
         </fieldset>
     </form>
     <form class="pure-form" novalidate>
@@ -173,12 +169,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="amountOfAmount.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{amountOfAmount.error}}</div>
-                    <div class="alert_dismiss" ng-click="amountOfAmount.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="amountOfAmount"></alert>
         </fieldset>
     </form>
     <form class="pure-form" novalidate>
@@ -207,12 +198,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="amountOfPercent.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{amountOfPercent.error}}</div>
-                    <div class="alert_dismiss" ng-click="amountOfPercent.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="amountOfPercent"></alert>
         </fieldset>
     </form>
     <form class="pure-form" novalidate>
@@ -242,12 +228,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert" ng-show="percentageChange.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{percentageChange.error}}</div>
-                    <div class="alert_dismiss" ng-click="percentageChange.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="percentageChange"></alert>
         </fieldset>
     </form>
     <hr/>

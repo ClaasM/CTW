@@ -99,6 +99,7 @@
         white-space: nowrap;
     }
 </style>
+<sharebar></sharebar>
 <h1>Body Fat Calculator</h1>
 <div ng-controller="toolController">
     <form class="pure-form pure-form-aligned" novalidate>
@@ -172,12 +173,7 @@
             </button>
 
 
-            <div class="alert" ng-show="bodyfat.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{bodyfat.error}}</div>
-                    <div class="alert_dismiss" ng-click="bodyfat.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="bodyfat"></alert>
             <div ng-show="bodyfat.result">
                 <p>Your Body is <b>{{bodyfat.result.bodyfat_percentage}}%</b> fat.</p>
 

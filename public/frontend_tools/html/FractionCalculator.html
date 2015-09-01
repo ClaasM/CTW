@@ -153,6 +153,7 @@
     }
 
 </style>
+<sharebar></sharebar>
 <h1>Fraction Calculator & Converter</h1>
 <div ng-controller="toolController">
     <form class="pure-form" novalidate>
@@ -197,12 +198,7 @@
                 <button class="pure-button" type="reset" ng-click="resetCalculate()">Clear
                 </button>
             </div>
-            <div class="alert" ng-show="calculate.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{calculate.error}}</div>
-                    <div class="alert_dismiss" ng-click="calculate.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="calculate"></alert>
         </fieldset>
     </form>
     <form class="pure-form" novalidate>
@@ -245,12 +241,7 @@
                 <button class="pure-button" type="reset" ng-click="resetConvert()">Clear
                 </button>
             </div>
-            <div class="alert" ng-show="convert.error !== undefined">
-                <div class="alert_inner">
-                    <div class="alert_text">{{convert.error}}</div>
-                    <div class="alert_dismiss" ng-click="convert.error = undefined">&times;</div>
-                </div>
-            </div>
+            <alert my-context="convert"></alert>
         </fieldset>
     </form>
     <hr/>

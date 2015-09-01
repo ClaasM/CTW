@@ -8,12 +8,67 @@ body {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
-h1{
+h1 {
     font-size: 19px;
 }
 
 h2 {
     font-size: 40px;
+}
+
+/*Sharebar*/
+
+.sharebar {
+    font-size: small;
+    display: table;
+    width: auto;
+    margin: -10px -11px 0px -10px;
+}
+
+.sharebar > div {
+    display: table-cell;
+}
+
+.sharebar > div > a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+}
+
+.sharebar > div > a table {
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    overflow: hidden;
+}
+
+.sharebar > div > a > table .count {
+    text-align: right;
+    direction: rtl;
+}
+.sharebar > div > a > table .count span {
+    padding: 5px;
+}
+.sharebar > div > a > table .icon {
+    width: 32px;
+    padding: 3px;
+}
+
+.sharebar .facebook {
+    background-color: #3370a9;
+}
+
+.sharebar .twitter {
+    background-color: #0bbbfe;
+}
+
+.sharebar .gplus {
+    background-color: #d5492b;
+}
+
+.sharebar .email {
+    background-color: #ff594d;
 }
 
 #wrapper {
@@ -40,19 +95,33 @@ h2 {
     box-shadow: 1px 1px 3px 2px rgba(0, 0, 0, 0.4);
 }
 
-#header {
+#header{
     margin: 5px;
+    height: 100px;
 }
-
-#heading-wrapper {
+#header table{
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+}
+.social_cell{
+    text-align: left;
+    padding-right: 10px;
+    height: 50%;
+    width: 80px;
+}
+.heading_cell{
+    vertical-align: top;
+    text-align: left;
+    padding: 10px;
+}
+.heading_link {
     text-decoration: none;
 }
-
-#heading {
-    padding: 10px 10px 50px 10px;
+.heading {
+    margin: 0;
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
     color: #333333;
-    margin: 0;
 }
 
 #middle {
@@ -100,8 +169,6 @@ h2 {
     width: 100%;
 }
 
-
-
 .alert_text {
     text-align: left;
     display: table-cell;
@@ -115,7 +182,9 @@ h2 {
     vertical-align: middle;
     text-align: right;
     font-size: 2em;
+    width: 40px;
     padding-right: 10px;
+    cursor: pointer;
 }
 
 /*Navigation*/
@@ -150,7 +219,7 @@ h2 {
 .navigation_category_label {
     padding-left: 10px;
     cursor: pointer;
-    
+
 }
 
 .navigation_category_label_selected, .navigation_category_label:hover {
@@ -161,11 +230,11 @@ h2 {
     line-height: 40px;
 }
 
-.navigation_tool_selected{
+.navigation_tool_selected {
     background-color: #ededed;
 }
 
-#navigation_feedback{
+#navigation_feedback {
     color: black;
     padding-left: 10px;
 }
@@ -190,8 +259,8 @@ h2 {
         display: block;
         position: fixed;
         top: 0;
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         text-align: center;
         margin: 5px;
         color: black;
@@ -210,12 +279,21 @@ h2 {
     }
 
     #header {
-        text-align: center;
+        height: 52px;
     }
 
-    #heading {
-        font-size: 20px;
-        padding: 10px 0;
+    .heading_cell {
+        padding: 5px 0 5px 57px;
+        vertical-align: middle;
+    }
+    .heading{
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 359px) {
+    .sharebar > div > a > table .label{
+        display: none;
     }
 
 }
@@ -230,12 +308,12 @@ h2 {
     height: auto;
 }
 
-.text p,h4{
+.text p, h4 {
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
     padding-right: 10px;
 }
 
-legend{
+legend {
     font-style: oblique;
 }
 
