@@ -5,21 +5,21 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 
-router.route('/:url')
+router.route('*')
     .get(function (req, res) {
         request.get(
-            'https://plusone.google.com/_/+1/fastbutton?url=http://' + req.params.url,
+            'https://plusone.google.com/_/+1/fastbutton?url=http%3A%2F%2F' + req.query.url,
             function (error, response, body) {
                 if (!error && body) {
                     var shareCount = body.split("<div id=\"aggregateCount\" class=\"Oy\">")[1];
-                    if(shareCount){
+                    if (shareCount) {
                         shareCount = shareCount.split("</div>")[0];
                         res.send(shareCount + "");
                     } else {
-                        res.send("-2");//TODO auf 0 ändern
+                        res.send("-1");//TODO auf 0 ändern
                     }
                 } else {
-                    res.send("-3"); //TODO auf 0 ändern
+                    res.send("-2"); //TODO auf 0 ändern
                 }
             });
     });

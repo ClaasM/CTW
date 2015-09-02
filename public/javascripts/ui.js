@@ -29,13 +29,9 @@
 
 
 var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location, $window) {
-    //TODO ans ende des scripts verlegen wenn fertig
-
-
     $rootScope.$on('$routeChangeSuccess', function () {
         $window.ga('send', 'pageview', {page: $location.path()});
     });
-
     $rootScope.selectCategory = function (category) {
         if ($rootScope.selectedCategory === category) {
             $rootScope.selectedCategory = "";
@@ -74,14 +70,21 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
 
 
 app.controller('contentController', function ($scope, $routeParams, $rootScope, $sce) {
+    $scope.$on('$includeContentRequested', function (angularEvent, src) {
+        $scope.loading = true;
+    });
     $scope.$on('$includeContentError', function (angularEvent, src) {
         $scope.toolUrl = 'html/404.html';
+        $scope.loading = false;
     });
     $scope.$on('$includeContentLoaded', function (event, src) {
+        $scope.loading = false;
         if ($routeParams.tool && $rootScope.categories) {
             $rootScope.selectTool($routeParams.tool);
         }
     });
+
+
     if ($routeParams.tool) {
         $scope.toolUrl = '/frontend_tools/html/' + $routeParams.tool + '.html';
     } else {
@@ -180,10 +183,14 @@ app.directive('sharebar', function ($location, $http, $rootScope) {
         templateUrl: "../directives/sharebar.html",
         link: function (scope, elem, attrs) {
             scope.shareUrl = encodeURIComponent($location.absUrl().replace("http://", "").replace("https://", ""));
-            scope.shareText =  encodeURIComponent($rootScope.selectedTool.description);
+            scope.shareText = encodeURIComponent($rootScope.selectedTool.description);
             $http({
                 method: 'GET',
-                url: 'https://api.facebook.com/method/links.getStats?urls=' + scope.shareUrl + '&format=json'
+                url: 'https://api.facebook.com/method/links.getStats',
+                params: {
+                    urls: scope.shareUrl,
+                    format: "json"
+                }
             }).success(function (data) {
                 if (data[0]) {
                     scope.fbShareCount = data[0].share_count;
@@ -191,14 +198,15 @@ app.directive('sharebar', function ($location, $http, $rootScope) {
             });
             $http({
                 method: 'GET',
-                url: 'twitter/' + scope.shareUrl
+                url: 'twitter',
+                params: {url: scope.shareUrl}
             }).success(function (data) {
                 scope.tweetCount = data;
             });
-
             $http({
                 method: 'GET',
-                url: 'gplus/' + scope.shareUrl
+                url: 'gplus',
+                params: {url: scope.shareUrl}
             }).success(function (data) {
                 scope.gplusShareCount = data;
             });
@@ -210,7 +218,7 @@ app.directive('alert', function ($location, $http, $rootScope) {
     return {
         restrict: 'E',
         replace: 'true',
-        scope: { myContext: '='},
+        scope: {myContext: '='},
         templateUrl: "../directives/alert.html"
     };
 });
