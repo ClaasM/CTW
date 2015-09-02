@@ -182,13 +182,15 @@ app.directive('sharebar', function ($location, $http, $rootScope) {
         replace: 'true',
         templateUrl: "../directives/sharebar.html",
         link: function (scope, elem, attrs) {
-            scope.shareUrl = encodeURIComponent($location.absUrl().replace("http://", "").replace("https://", ""));
+            var unencoded = $location.absUrl().replace("http://", "").replace("https://", "");
+            scope.shareUrl = encodeURIComponent(unencoded);
+            console.log(unencoded);
             scope.shareText = encodeURIComponent($rootScope.selectedTool.description);
             $http({
                 method: 'GET',
                 url: 'https://api.facebook.com/method/links.getStats',
                 params: {
-                    urls: scope.shareUrl,
+                    urls: unencoded.replace("www", ""),
                     format: "json"
                 }
             }).success(function (data) {
