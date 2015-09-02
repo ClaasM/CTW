@@ -5,7 +5,7 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 
-router.route('*')
+router.route('/*')
     .get(function (req, res) {
         request.get(
             'https://plusone.google.com/_/+1/fastbutton?url=http%3A%2F%2F' + req.query.url,

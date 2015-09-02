@@ -5,7 +5,7 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 
-router.route('*')
+router.route('/*')
     .get(function (req, res) {
         request.get(
             'http://cdn.api.twitter.com/1/urls/count.json?url=http%3A%2F%2F' + req.query.url,

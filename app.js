@@ -27,12 +27,12 @@ app.use(cookieParser());
 app.use(require('prerender-node').set('prerenderToken', 'VZlNVlkyOi6eaTnm6w81'));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/sendmail', sendmail);
 
+app.use('/sendmail', sendmail);
 app.use('/gplus', gplus);
 app.use('/twitter', twitter);
 
-app.all('/*', function(req, res, next) {
+app.get('/*', function(req, res, next) {
     if (path.extname(req.path).length > 0) {
         // bad resource request
         next();
