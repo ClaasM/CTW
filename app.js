@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var sendmail = require('./routes/sendmail');
 var gplus = require('./routes/gplus');
 var twitter = require('./routes/twitter');
+var fb = require('./routes/fb');
 
 var app = express();
 
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/sendmail', sendmail);
 app.use('/gplus', gplus);
 app.use('/twitter', twitter);
+app.use('/fb', fb);
 
 app.get('/*', function(req, res, next) {
     if (path.extname(req.path).length > 0) {
