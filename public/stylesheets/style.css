@@ -31,24 +31,35 @@ h2 {
     text-decoration: none;
     color: white;
 }
-.sharebar > div > a table {
+.sharebar > div > a > div {
     height: 100%;
     width: 100%;
+    display: table;
+    vertical-align: middle;
     table-layout: fixed;
     overflow: hidden;
 }
-.sharebar > div > a > table .count {
+.sharebar > div > a > div .count {
+    display: table-cell;
+    vertical-align: middle;
     text-align: right;
     direction: rtl;
 }
-.sharebar > div > a > table .count span {
+.sharebar > div > a > div .count span {
     padding: 5px;
 }
-.sharebar > div > a > table .icon {
+.sharebar > div > a > div .icon {
+    display: table-cell;
+    vertical-align: middle;
     width: 36px;
     box-sizing: border-box;
     padding: 3px;
 }
+.sharebar > div > a > div .label {
+    vertical-align: middle;
+    display: table-cell;
+}
+
 .sharebar .facebook {
     background-color: #3370a9;
 }
@@ -283,10 +294,9 @@ legend {
 }
 
 @media (max-width: 379px) {
-    .sharebar > div > a > table .label{
+    .sharebar > div > a > div .label{
         display: none;
     }
-
 }
 
 
