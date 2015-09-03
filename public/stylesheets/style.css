@@ -331,6 +331,7 @@ legend {
     .heading_cell {
         padding: 0 0 0 57px;
         vertical-align: middle;
+        width: auto;
     }
 
     .heading_cell > span {
