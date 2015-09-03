@@ -106,14 +106,16 @@ app.controller('feedbackController', function ($scope, $rootScope, $http, $sce) 
     $rootScope.selectedTool = undefined;
 
     $scope.sendFeedback = function () {
-        $http.post('/sendmail', {
-            text: $scope.text,
-            sender: $scope.sender
-        }).
-            then(function (response) {
-                $scope.text = undefined;
-                $scope.sender = undefined;
-            });
+        if ($scope.text) {
+            $http.post('/sendmail', {
+                text: $scope.text,
+                sender: $scope.sender
+            }).
+                then(function (response) {
+                    $scope.text = undefined;
+                    $scope.sender = undefined;
+                });
+        }
     }
 });
 

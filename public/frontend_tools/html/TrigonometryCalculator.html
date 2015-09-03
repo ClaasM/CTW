@@ -90,7 +90,10 @@
             for (var i = 0; i < conditions.length; i++) {
                 if ((t = contains(triangle, conditions[i]))) {
                     functions[i](t);
-                    return;
+                    if(t.sides[0].edge && t.sides[1].edge && t.sides[2].edge
+                    && t.sides[0].angle && t.sides[1].angle && t.sides[2].angle){
+                        return;
+                    }
                 }
             }
             triangle.error = "Invalid inputs: No triangle can be generated."
@@ -228,6 +231,7 @@
             return triangle;
         };
         var fromSSA = function (triangle) {
+
             var A = triangle.sides[0].angle;
             var b = triangle.sides[1].edge;
             var a = triangle.sides[0].edge;
@@ -241,6 +245,11 @@
             var B_2 = remainingAngle(B_1, 0);
             var C_2 = remainingAngle(A, B_2);
             var c_2 = losToEdge(C_2, a, A);
+
+            console.log(A);
+            console.log(b);
+            console.log(a);
+            console.log(losToAngle(b, a, A));
 
             if (C_2 > 0 && B_2 > 0 && c_2 > 0) {
                 triangle.sides[2].angle = C_1.toFixed(4) + " or " + C_2.toFixed(4);
