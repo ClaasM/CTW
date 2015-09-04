@@ -98,7 +98,7 @@
 
         var toMixedFraction = function (f) {
             var fractionSplit = f.toFraction().split(" ");
-            if(fractionSplit.length > 1){
+            if (fractionSplit.length > 1) {
                 return {
                     n: parseFloat(fractionSplit[1].split("/")[0]),
                     d: parseFloat(fractionSplit[1].split("/")[1]),
@@ -106,7 +106,7 @@
                 }
             } else {
 
-                if(fractionSplit[0].split("/").length > 1){
+                if (fractionSplit[0].split("/").length > 1) {
                     console.log("Constains /");
                     return {
                         n: parseFloat(fractionSplit[0].split("/")[0]),
@@ -248,27 +248,64 @@
     <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>How to use the fraction calculator</h4>
+
             <p>
-                If you want to perform a operation on two fractions, enter them in the input fields above (numerator on top, denominator on bottom) and choose a operation (add, subtract, multiply or divide).<br/>
-                When you click calculate, the fraction calculator will perform the operation and show the result on the right of the equal-sign.
+                If you want to perform a operation on two fractions, enter them in the input fields above (numerator on
+                top, denominator on bottom) and choose a operation (add, subtract, multiply or divide).<br/>
+                When you click calculate, the fraction calculator will perform the operation and show the result on the
+                right of the equal-sign.
+                This calculator handles simple operations for adding, subtracting, dividing or multiplying fractions and returns an answer in a reduced fraction and a mixed number, if it exists.
+                The algebraic formula for addition of fractions is a/b + c/d = (ad + bc) / bd. For example: 2/6 + 1/4 = (2*4 + 1*6) / 6*4 = 14 / 24.
+                Reducing this fraction we get 7/12.
+                The formula for subtracting fractions is a/b - c/d = (ad - bc) / bd. For example: 2/6 - 1/4 = (2*4 - 1*6) / 6*4 = 2 / 24.
+                Reducing this fraction we get 1/12.
+                The algebraic formula for multiplying fractions is a/b * c/d = ac / bd. For example: 2/6 * 1/4 = 2*1 / 6*4 = 2 / 24.
+                Reducing this fraction we get 1/12.
+                The algebraic formula for dividing fractions is a/b / c/d = ad / bc. For example: 2/6 * 1/4 = 2*4 / 6*1 = 8 / 6.
+                Reducing this fraction we get 4/3 or 1-1/3.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>How to use the fraction converter</h4>
+
             <p>
-                If you want to convert a mixed fraction to a fraction and vice-versa, a decimal to a fraction and vice-versa or a mixed fraction to a decimal and vice-versa, you can do so by filling out one of the inputs above
+                If you want to convert a mixed fraction to a fraction and vice-versa, a decimal to a fraction and
+                vice-versa or a mixed fraction to a decimal and vice-versa, you can do so by filling out one of the
+                inputs above
                 (mixed fraction, decimal or fraction) and click convert to get the other two.
+                Decimals and fractions represent the same thing: a number that is not exactly a whole number.
+                This page will show you how to convert a decimal into its equivalent fraction.
+                Convert a Fraction to a Decimal Number. Convert a Decimal Number to a Fraction.
+                Convert a Decimal Number to a Mixed Fraction. Convert a Mixed Fraction to a Decimal Number.
+                Convert a Fraction to a Mixed Fraction. Convert a Mixed Fraction to a Fraction.
+
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-3 text">
             <h4>About fractions</h4>
 
             <p>
-                A fraction (from Latin: fractus, "broken") represents a part of a whole or, more generally, any number of equal parts.
-                When spoken in everyday English, a fraction describes how many parts of a certain size there are, for example, one-half, eight-fifths, three-quarters.
-                A common, vulgar, or simple fraction (examples: <sup>1</sup>/<sub>2</sub> and <sup>24</sup>/<sub>7</sub>) consists of an integer numerator, displayed above a line (or before a slash), and a non-zero integer denominator, displayed below (or after) that line.
-                Numerators and denominators are also used in fractions that are not common, including compound fractions, complex fractions, and mixed numerals.<br/>
+                A fraction (from Latin: fractus, "broken") represents a part of a whole or, more generally, any number
+                of equal parts.
+                When spoken in everyday English, a fraction describes how many parts of a certain size there are, for
+                example, one-half, eight-fifths, three-quarters.
+                A common, vulgar, or simple fraction (examples: <sup>1</sup>/<sub>2</sub> and <sup>24</sup>/<sub>7</sub>)
+                consists of an integer numerator, displayed above a line (or before a slash), and a non-zero integer
+                denominator, displayed below (or after) that line.
+                Numerators and denominators are also used in fractions that are not common, including compound
+                fractions, complex fractions, and mixed numerals.<br/>
                 Source: <a href="https://en.wikipedia.org/wiki/Fraction_(mathematics)">Wikipedia</a>
+                The numerator represents a number of equal parts, and the denominator, which cannot be zero, indicates
+                how many of those parts make up a unit or a whole. For example, in the fraction 3/4, the numerator, 3,
+                tells us that the fraction represents 3 equal parts, and the denominator, 4, tells us that 4 parts make
+                up a whole. The picture to the right illustrates 3/4 or 6/8 of a cake.
+                Fractional numbers can also be written without using explicit numerators or denominators, by using
+                decimals, percent signs, or negative exponents (as in 0.01, 1%, and 10?2 respectively, all of which are
+                equivalent to 1/100). An integer such as the number 7 can be thought of as having an implicit
+                denominator of one: 7 equals 7/1.
+                Other uses for fractions are to represent ratios and to represent division.[1] Thus the fraction 3/4 is
+                also used to represent the ratio 3:4 (the ratio of the part to the whole) and the division 3 / 4 (three
+                divided by four).
             </p>
         </div>
     </div>
