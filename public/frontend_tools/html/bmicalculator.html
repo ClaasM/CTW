@@ -1,0 +1,207 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+
+        var initial = {
+            weight: undefined,
+            height: undefined,
+            imperial_feet: undefined,
+            imperial_inches: undefined,
+            age: undefined,
+
+            result: undefined,
+            error: undefined
+        }
+
+        $scope.bmi = angular.copy(initial);
+        $scope.units = "Metric";
+        $scope.calculate = function () {
+
+            var scope = $scope.bmi;
+            scope.error = undefined;
+
+            if (validateDecimal(scope.weight) && (($scope.units === 'Metric' && validateDecimal(scope.height))
+                    || ($scope.units === 'Imperial' && (validateDecimal(scope.imperial_feet) || validateDecimal(scope.imperial_inches))))) {
+
+                scope.result = {
+                    bmi: undefined,
+                    weight_difference: undefined,
+                    gain: undefined,
+                    age: undefined
+                };
+
+                if ($scope.units === 'Imperial') {
+                    var m = scope.weight * 0.45359237;
+                    var l = (scope.imperial_feet || 0) * 0.3048 + (scope.imperial_inches || 0) * 0.0254;
+                    scope.result.bmi = (m / Math.pow(l, 2)).toFixed(1);
+                    scope.result.weight_difference = ((m - 22 * Math.pow(l, 2)) / 0.45359237).toFixed(2);
+                } else {
+                    var m = scope.weight;
+                    var l = scope.height / 100;
+                    scope.result.bmi = (m / Math.pow(l, 2)).toFixed(1);
+                    scope.result.weight_difference = (m - 22 * Math.pow(l, 2)).toFixed(2);
+                    console.log(scope.result.weight_difference);
+                }
+                if (scope.result.weight_difference < 0) {
+                    scope.result.weight_difference *= -1;
+                    scope.result.gain = "gain";
+                } else {
+                    scope.result.gain = "lose";
+                }
+                scope.result.age = scope.age;
+            } else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.bmi = angular.copy(initial);
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    .nowrap {
+        white-space: nowrap;
+    }
+</style>
+<sharebar></sharebar>
+<h1>BMI Calculator</h1>
+<div ng-controller="toolController">
+    <form class="pure-form pure-form-aligned" novalidate>
+        <fieldset>
+            <legend>Enter your information and click calculate.
+                <a class="nowrap" href=""
+                   ng-click="units === 'Imperial' ? units = 'Metric' : units = 'Imperial'; reset()">
+                    {{units === 'Imperial' ? 'Use Metric' : 'Use Imperial'}}
+                </a>
+            </legend>
+            <div class="pure-control-group" ng-show="units === 'Metric'">
+                <label for="height">Height (cm)</label>
+                <input id="height" class="input" type="number" step="any" placeholder="cm"
+                       ng-model="bmi.height">
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height_imperial">Height (ft & in)</label>
+                <input id="height_imperial" class="imperial_input" type="number" step="any" placeholder="feet"
+                       ng-model="bmi.imperial_feet"/>
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height"></label>
+                <input class="imperial_input" type="number" step="any" placeholder="inches"
+                       ng-model="bmi.imperial_inches"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="weight">Weight ({{units === 'Imperial'?'lbs.':'kg'}})</label>
+                <input id="weight" class="input" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'lbs.':'kg'}}"
+                       ng-model="bmi.weight"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="age">Age: (optional)</label>
+                <input id="age" class="input" type="number" step="any" placeholder="age"
+                       ng-model="bmi.age">
+            </div>
+
+            <button class="pure-button pure-button-primary input" ng-click="calculate()">Calculate
+            </button>
+
+            <button class="pure-button input" type="reset" ng-click="reset()">Clear
+            </button>
+
+
+            <div class="alert" ng-show="bmi.error !== undefined">
+                <div class="alert_inner">
+                    <div class="alert_text">{{bmi.error}}</div>
+                    <div class="alert_dismiss" ng-click="bmi.error = undefined">&times;</div>
+                </div>
+            </div>
+            <div ng-show="bmi.result">
+                <p>Your{{bmi.result.age <= 11?' childs':''}} BMI is <b>{{bmi.result.bmi}}</b></p>
+
+                <p ng-show="bmi.result.age > 11 || !bmi.result.age">You need to {{bmi.result.gain}}
+                    {{bmi.result.weight_difference}}{{units === 'Imperial'?'lbs':'kg'}} to reach a perfect BMI of
+                    22.</p>
+
+                <p ng-show="bmi.result.age <= 11">To see if your childs BMI is healthy, please visit the <a
+                        href="http://www.who.int/childgrowth/standards/bmi_for_age/en/">WHO Website</a>.</p>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I use this calculator?</h4>
+
+        <p>
+            This body mass index calculator works for women, men, teens and kids alike, since the formula stays the same
+            for all of them.<br/>
+            If the person who's BMI is calculated is 11 or younger, no recommendation regarding weight loss or gain is
+            made since kids tend to have a lot of variation in their BMI without actually being obese or
+            underweight<br/>
+            For more information about a healthy weight for chilren please visit the <a
+                href="http://www.who.int/childgrowth/standards/bmi_for_age/en/">WHO Website.</a><br/>
+            If you live in the UK, USA or any other country that doesn't use the metric system you can switch to the
+            imperial system using the link on the top.<br/>
+            BMI (Body Mass Index) is a measurement of body fat based on height and weight that applies to both men and
+            women between the ages of 18 and 65 years.
+
+            BMI can be used to indicate if you are overweight, obese, underweight or normal. A healthy BMI score is
+            between 20 and 25. A score below 20 indicates that you may be underweight; a value above 25 indicates that
+            you may be overweight.
+
+            You can calculate your BMI by using our BMI Calculator below, or by using the BMI Formula.
+
+            Please remember, however, that this is only one of many possible ways to assess your weight. If you have any
+            concerns about your weight, please discuss them with your physician, who is in a position, unlike this BMI
+            calculator, to address your specific individual situation.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>What is the BMI?</h4>
+
+        <p>
+            The BMI, or Body Mass Index, is a value derived from the mass (weight) and height of an individual.<br/>
+            The BMI is defined as the body mass divided by the square of the body height (m / l<sup>2</sup>), and is
+            universally expressed in units of kg/m2, resulting from mass in kilograms and height in metres.<br/>
+            The BMI may also be determined using a table[note 2] or chart which displays BMI as a function of mass and
+            height using contour lines or colors for different BMI categories, and may use two different units of
+            measurement.[note 3]
+            The BMI is an attempt to quantify the amount of tissue mass (muscle, fat, and bone) in an individual, and
+            then categorize that person as underweight, normal weight, overweight, or obese based on that value.
+            However, there is some debate about where on the BMI scale the dividing lines between categories should be
+            placed.[2] Commonly accepted BMI ranges are underweight: under 18.5, normal weight: 18.5 to 25, overweight:
+            25 to 30, obese: over 30.
+            There are criticisms of using the BMI to define obesity in individuals.[3] One is that the BMI was designed
+            for population studies, not individuals. Another is that body fat percentage (BFP) is a more reliable
+            indicator of obesity than BMI: very muscular, lean (low body fat) individuals can be classified as obese
+            using BMI, but are classified as having a normal weight using BFP. An even simpler alternative to the BMI is
+            to define obese individuals as those whose waist circumference is greater than 50% of their height,
+            indicating excess intra-abdominal fat.
+            Source:<a href="https://en.wikipedia.org/wiki/Body_mass_index">Wikipedia</a>
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Is my BMI healthy?</h4>
+
+        <p>
+            Commonly accepted BMI ranges are: <br/>
+            underweight: under 18.5, normal weight: 18.5 to 25, overweight: 25 to 30, obese: over 30.
+            YourCalculator.com is not a health advisor. If you are obese or underweight, please visit a doctor for
+            medical advice.
+            The medical establishment and statistical community have both highlighted the limitations of BMI.
+            Mathematician Keith Devlin and the restaurant industry association Center for Consumer Freedom argue that
+            the error in the BMI is significant and so pervasive that it is not generally useful in evaluation of
+            health. University of Chicago political science professor Eric Oliver says BMI is a convenient but
+            inaccurate measure of weight, forced onto the populace, and should be revised.
+        </p>
+    </div>
+</div>
+</div>
+
+

@@ -1,0 +1,243 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+
+        var initial = {
+            principal: undefined,
+            years: undefined,
+            interest: undefined,
+            //completely optional:
+            monthly: undefined,
+            interval: undefined,
+
+            result: undefined,
+            error: undefined
+        }
+        $scope.investment = angular.copy(initial);
+
+        $scope.calculate = function () {
+            var scope = $scope.investment;
+            if (validateDecimal(scope.principal) && validateDecimal(scope.years) && validateDecimal(scope.interest)) {
+
+                scope.result = {fv: undefined, fvA: undefined};
+
+                var interval = 1;
+                if (validateDecimal(scope.interval)) {
+                    interval = scope.interval;
+                }
+
+                var pv = scope.principal;
+                var r = scope.interest / interval / 100;
+                var n = scope.years * interval;
+
+                var fv = pv * Math.pow(1 + r, n);
+                scope.result.fv = fv.toFixed(2);
+
+                if (validateDecimal(scope.monthly)) {
+                    var p = scope.monthly * 12 / interval;
+
+                    var fvA = p * ((Math.pow(1 + r, n) - 1) / r);
+                    scope.result.fvA = fvA.toFixed(2);
+                }
+            } else {
+                scope.error = 'Missing or invalid Input';
+                return;
+            }
+        }
+        $scope.reset = function () {
+            $scope.investment = angular.copy(initial);
+        }
+
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    });
+</script>
+<style>
+    #form-wrapper {
+        text-align: center;
+    }
+</style>
+<sharebar></sharebar>
+<h1>Investment & Savings Calculator</h1>
+<div ng-controller="toolController">
+    <div id="form-wrapper">
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Fill out the form and click calculate</legend>
+                <div class="pure-control-group">
+                    <label for="principal" class="label">Initial Amount</label>
+                    <input id="principal" type="number" step="any" placeholder="amount"
+                           ng-model="investment.principal"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="years" class="label">Years</label>
+                    <input id="years" type="number" step="any" placeholder="years" ng-model="investment.years"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="interest" class="label">Interest Rate (%)</label>
+                    <input id="interest" type="number" step="any" placeholder="%" ng-model="investment.interest"/>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Additional information (optional)</legend>
+                <div class="pure-control-group">
+                    <label for="monthly" class="label">Monthly Addition</label>
+                    <input id="monthly" type="number" step="any" placeholder="amount (0)"
+                           ng-model="investment.monthly"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="compound" class="label">Compound Interest (times annually)</label>
+                    <input id="compound" type="number" step="any" placeholder="annually (1)"
+                           ng-model="investment.interval"/>
+                </div>
+
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <alert my-context="investment"></alert>
+            </fieldset>
+        </form>
+    </div>
+    <div ng-show="investment.result !== undefined">
+        <p> The Future Value of your Investment will be <b>{{(investment.result.fv*1 + (investment.result.fvA ||
+            0)*1).toFixed(2)}}</b>.</p>
+
+        <p ng-show="investment.result.fvA"><b>{{(investment.result.fv*1).toFixed(2)}}</b> of that comes from your
+            initial deposit.</p>
+
+        <p ng-show="investment.result.fvA"><b>{{(investment.result.fvA*1).toFixed(2)}}</b> of that comes from your
+            monthly deposits.</p>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I use this investment calculator?</h4>
+
+        <p>
+            Enter your initial investment or deposit, the years you want to invest it and the interest rate you get and
+            click calculate.
+            The FV (Future Value) and ROI (Return on Investment) of your savings will then be calculated and presented
+            to you.<br/>
+            You can also specify how often the interest is compounded per year and how much you want to deposit monthly.<br/>
+            Use this calculator to determine how much your money can grow using the power of compound interest.
+            This investment calculator can be used to calculate a specific parameter for an investment plan. The tabs in
+            the following represent the parameter to be calculated. For example, if you want to know the return rate
+            needed to reach your investment goal with a investment schedule, please click the "Return Rate" tab to
+            calculate that. This investment calculator is based on a fixed return rate.
+            Rate of return on investment
+            This is the rate of return you expect from your investments. You are also able to select the frequency that
+            earnings are compounded in your investment account. The actual rate of return is largely dependent on the
+            types of investments you select. The Standard & Poor's 500 (S&P 500) for the 10 years ending Dec. 1st,
+            2014, had an annual compounded rate of return of 8.06%, including reinvestment of dividends. From January
+            1970 through to Dec. 2014, the average annual compounded rate of return for the S&P 500, including
+            reinvestment of dividends, was approximately 10.7%. Since 1970, the
+            highest 12-month return was 61% (June 1982 through June 1983). The lowest 12-month return was -43% (March
+            2008 to March 2009). Savings accounts at a financial institution may pay as little as 0.25% or less but
+            carry significantly lower risk of loss of principal balances.
+            It is important to remember that these scenarios are hypothetical and that future rates of return can't be
+            predicted with certainty and that investments that pay higher rates of return are generally subject to
+            higher risk and volatility. The actual rate of return on investments can vary widely over time, especially
+            for long-term investments. This includes the potential loss of principal on your investment. It is not
+            possible to invest directly in an index and the compounded rate of return noted above does not reflect sales
+            charges and other fees that Separate Account investment funds and/or investment companies may charge.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How does this work?</h4>
+
+        <p>
+            To calculate the future value of your initial investment, <a
+                href="http://www.financeformulas.net/Future_Value.html">this formula</a> is used.<br/>
+            To calculate the future value of your monthly deposits or annuity, <a
+                href="http://www.financeformulas.net/Future_Value_of_Annuity.html">this formula</a> is used.<br/>
+            Both formulas take compound interest and length of the period into account.
+            The Investment Calculator can help you to determine the return on investments with a fixed rate of return. A
+            good example of this type of investment is a Certificate of Deposit, or CD, which is available at most
+            banks. A CD is a low risk investment, because, up to the amount of $250,000, it is guaranteed by the Federal
+            Deposit Insurance Corporation, a U.S. government agency. It pays a fixed rate of interest for a specified
+            amount of time. The longer you leave your money in the CD, the better the rate of interest you can receive.
+            Other low-risk investments of this type are savings accounts and money market accounts, which pay relatively
+            low rates of interest.
+            Risk is a key factor when making investments. In general, one is paid a premium for taking the greater risk.
+            So, for example, if you buy the debt of some companies, which is rated at a risky level by the agencies that
+            determine levels of risk in corporate debt (Moody's, Fitch, Standard & Poor's), you will earn a very high
+            rate of interest on it, but you run the risk that these companies might go out of business, and you could
+            lose your investment.
+            There are, of course, less risky companies to invest in. Buying bonds from companies that are highly rated
+            for risk by the agencies is much safer, but one earns a lower rate of interest. Bonds can be bought both for
+            the short term and the long term.
+            Short-term bond investors want to buy a bond when its price is low and sell it when the price has risen,
+            rather than holding the bond to maturity. Bond prices tend to drop as interest rates rise, and they
+            typically rise when interest rates fall. Within different parts of the bond market, differences in supply
+            and demand can also generate short-term trading opportunities.
+            When buying bonds for the long term, you invest in a bond and hold it to maturity. In this way, you will get
+            interest payments, usually twice a year, and receive the face value of the bond at maturity. When you follow
+            a long-term bond-buying strategy, you need not be too concerned about the impact of interest rates on a
+            bond's price or market value. If interest rates rise, and the market value of your bond changes, your
+            strategy does not change unless you try to sell the bond. This is a conservative approach to bond
+            investment.
+            One very special kind of bond is the United States Treasury inflation-protected securities, known as (TIPS).
+            TIPS offer an effective way to handle the risk of inflation. They also provide a risk-free return guaranteed
+            by the U.S. government. For this reason, they are a very popular investment, although the return is
+            relatively low compared with other fixed-income investments.
+            TIPS are guaranteed to keep pace with inflation as defined by the Consumer Price Index (CPI). This is what
+            makes them unique and defines their behavior. Their rate of return is tied to the index.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Who should use this?</h4>
+
+        <p>
+            If are looking to invest, open up a 401k/retirement savings account or want to deposit your money anywhere
+            else where you get interest, this calculator can give you a good estimation
+            on what your money will be worth in a couple of years.<br/>
+            Remember that this calculator is not 100% accurate and that this site does not provide financial advice. For
+            investment advice, please consult a financial adviser.
+            Still another form of investment is equity or stocks. While this is not a fixed-interest investment, it is
+            one of the most important forms of investment for both institutional and private investors.
+            Stock is a share, literally a percentage of ownership, in a company. It permits you, as a part owner of that
+            company, to share in its profits, and you receive those funds in the form of dividends for as long as you
+            hold the shares (and the company pays dividends). Some company stocks are traded on exchanges, and many
+            investors purchase stocks with the object of buying them at a low price and selling them at a higher one.
+            Many investors prefer to invest in mutual funds, or other types of stock funds, which group a number of
+            stocks. These funds are actively managed by a skilled trader who tries to bring together as many performing
+            stocks as possible. The investor pays a small fee, called a "load," for the privilege of working with the
+            manager. Another kind of stock fund is the Index fund, which bases its strategy on the performance of
+            indexes like the Dow Jones, the S&P 500, or the Russell 1000, groups of stocks that are selected on the
+            basis of size and quality.
+            Still another profitable and popular investment is real estate. The most basic way of investing is to
+            purchase low-valued property that you have reason to believe will appreciate in value over a reasonable
+            period of time. Usually, an influx of people or an increase in development makes the property more valuable.
+            Alternatively, land that you purchase can be built on and made more valuable in this way.
+            Another way to invest in real estate is to buy houses or apartment buildings and to rent them. The income
+            from rental properties - it is known as yield - can rise to 30 percent or 40 percent per year if the
+            properties are managed carefully, and the proper location is chosen.
+            Still another popular form of investment is in commodities. These can range from precious metals like gold
+            and silver, to useful commodities like oil and gas. Investment in gold is complex, as the price of gold is
+            not determined by any industrial usage. Gold is used in jewelry, but not in any other practical form. The
+            price of gold is determined very largely by the fact that gold is valuable, and investors wish to hold it,
+            particularly in times of insecurity. When there is war or crisis, investors buy gold, and the price goes up.
+            Investing in silver, on the other hand, is very largely determined by the demand for that commodity in
+            photovoltaics, in the automobile industry, and in other practical uses. Oil is a very popular investment,
+            and demand for oil is strong as the need for gasoline is always considerable. Oil is traded around the world
+            on spot markets, and its price goes up and down depending on the state of the global economy. Investment in
+            commodities like gas, on the other hand, is usually made through the futures exchanges, of which the largest
+            in the U.S. is the CBOT in Chicago. These trade options on quantities of gas and other commodities before
+            delivery. A private investor can trade into futures and then trade out, always avoiding the terminal
+            delivery point.
+            For investments with a fixed rate of return, this Investment Calculator will help you to determine interest
+            payments and rate of return, as, for example with a bond investment. The investment calculator also shows
+            how much you must invest each month to reach a given target.
+        </p>
+    </div>
+</div>
+</div>
+
+

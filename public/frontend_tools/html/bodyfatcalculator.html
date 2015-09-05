@@ -1,0 +1,255 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var initial = {
+            height: undefined,
+            imperial_feet: undefined,
+            imperial_inches: undefined,
+
+            neck: undefined,
+            waist: undefined,
+            hips: undefined,
+
+            weight: undefined,
+            sex: "male",
+
+            result: undefined,
+            error: undefined
+        }
+
+        $scope.bodyfat = angular.copy(initial);
+        $scope.units = "Metric";
+        $scope.calculate = function () {
+            var scope = $scope.bodyfat;
+            if (validateDecimal(scope.neck) && validateDecimal(scope.waist)) {
+                var height;
+                var neck;
+                var waist;
+                var percentage;
+                if ($scope.units === 'Imperial' && (validateDecimal(scope.imperial_feet) || validateDecimal(scope.imperial_inches))) {
+                    height = (scope.imperial_feet || 0) * 30.48 + (scope.imperial_inches || 0) * 2.54;
+                    neck = scope.neck * 2.54;
+                    waist = scope.waist * 2.54;
+                } else if ($scope.units === 'Metric' && validateDecimal(scope.height)) {
+                    height = scope.height;
+                    neck = scope.neck;
+                    waist = scope.waist;
+                } else {
+                    scope.error = 'Missing or invalid Input';
+                    return;
+                }
+                if (scope.sex === 'male') {
+                    percentage = bodyFatMen(height, neck, waist);
+                } else if (scope.sex === 'female' && validateDecimal(scope.hips)) {
+                    var hips;
+                    if ($scope.units === 'Imperial') {
+                        hips = scope.hips * 2.54;
+                    } else if ($scope.units === 'Metric') {
+                        hips = scope.hips;
+                    }
+                    percentage = bodyFatWomen(height, neck, waist, hips);
+                } else {
+                    scope.error = 'Missing or invalid Input';
+                    return;
+                }
+                percentage = Math.max(percentage, 0);
+                scope.result = {
+                    bodyfat_percentage: percentage.toFixed(2),
+                    bodyfat_weight: undefined,
+                    lean_weight: undefined
+                };
+                if (scope.weight) {
+                    scope.result.bodyfat_weight = (percentage / 100 * scope.weight).toFixed(2);
+                    scope.result.lean_weight = (scope.weight - scope.result.bodyfat_weight).toFixed(2);
+                }
+
+            } else {
+                scope.error = 'Missing or invalid Input';
+                return;
+            }
+
+
+        }
+        $scope.reset = function () {
+            $scope.bodyfat = angular.copy(initial);
+        }
+
+        var bodyFatWomen = function (height, neck, waist, hips) {
+            return 495 / (1.29579 - 0.35004 * (Math.log(waist + hips - neck) / Math.LN10) + 0.22100 * (Math.log(height) / Math.LN10)) - 450;
+        }
+        var bodyFatMen = function (height, neck, waist) {
+            return 495 / (1.0324 - 0.19077 * (Math.log(waist - neck) / Math.LN10) + 0.15456 * (Math.log(height) / Math.LN10)) - 450;
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    .gender-radio {
+        text-align: left !important;
+        display: inline-block !important;
+        width: 100px !important;
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+</style>
+<sharebar></sharebar>
+<h1>Body Fat Calculator</h1>
+<div ng-controller="toolController">
+    <form class="pure-form pure-form-aligned" novalidate>
+        <fieldset>
+            <legend>Enter your information and click calculate.
+                <a class="nowrap" href=""
+                   ng-click="units === 'Imperial' ? units = 'Metric' : units = 'Imperial'; reset()">
+                    {{units === 'Imperial' ? 'Use Metric' : 'Use Imperial'}}
+                </a>
+            </legend>
+            <div class="pure-control-group">
+                <label for="male">
+                    Sex:
+                </label>
+                <input id="male" type="radio" name="sex" value="male" ng-model="bodyfat.sex" checked>
+                <label for="male" class="gender-radio">
+                    Male
+                </label>
+            </div>
+            <div class="pure-control-group">
+                <label for="female"></label>
+                <input id="female" type="radio" name="sex" value="female" ng-model="bodyfat.sex">
+                <label for="female" class="gender-radio">
+                    Female
+                </label>
+
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Metric'">
+                <label for="height">Height (cm)</label>
+                <input id="height" type="number" step="any" placeholder="cm"
+                       ng-model="bodyfat.height">
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height_imperial">Height (ft & in)</label>
+                <input id="height_imperial" type="number" step="any" placeholder="feet"
+                       ng-model="bodyfat.imperial_feet"/>
+            </div>
+            <div class="pure-control-group" ng-show="units === 'Imperial'">
+                <label for="height"></label>
+                <input type="number" step="any" placeholder="inches"
+                       ng-model="bodyfat.imperial_inches"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="neck">Neck ({{units === 'Imperial'?'inch':'cm'}})</label>
+                <input id="neck" class="input" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'inch':'cm'}}"
+                       ng-model="bodyfat.neck"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="waist">Waist ({{units === 'Imperial'?'inch':'cm'}})</label>
+                <input id="waist" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'inch':'cm'}}"
+                       ng-model="bodyfat.waist">
+            </div>
+            <div class="pure-control-group" ng-show="bodyfat.sex === 'female'">
+                <label for="hips">Hips ({{units === 'Imperial'?'inch':'cm'}})</label>
+                <input id="hips" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'inch':'cm'}}"
+                       ng-model="bodyfat.hips">
+            </div>
+            <div class="pure-control-group">
+                <label for="weight">Weight (optional, {{units === 'Imperial'?'lbs':'kg'}})</label>
+                <input id="weight" type="number" step="any"
+                       placeholder="{{units === 'Imperial'?'lbs':'kg'}}"
+                       ng-model="bodyfat.weight">
+            </div>
+            <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+            </button>
+
+            <button class="pure-button" type="reset" ng-click="reset()">Clear
+            </button>
+
+
+            <alert my-context="bodyfat"></alert>
+            <div ng-show="bodyfat.result">
+                <p>Your Body is <b>{{bodyfat.result.bodyfat_percentage}}%</b> fat.</p>
+
+                <p ng-show="bodyfat.result.bodyfat_weight"> Thats {{bodyfat.result.bodyfat_weight}}{{units ===
+                    'Imperial'?'lbs':'kg'}} of fat.</p>
+
+                <p ng-show="bodyfat.result.lean_weight"> Your lean weight (without body fat)
+                    is {{bodyfat.result.lean_weight}}{{units === 'Imperial'?'lbs':'kg'}}.</p>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I use this calculator?</h4>
+
+        <p>
+            Enter your sex (female or male), your height, your neck circumference, your waist circumference and, if
+            you're a woman, your hip circumference (because different formulas are used for men and women).<br/>
+            If you enter your weight as well, the calculator will tell you how much of your weight is fat and what your
+            lean weight is (weight without fat).<br/>
+            You can switch between metric and imperial system using the link above the page.
+            How much fat are you carrying? Find out if you are in the healthy range with this fat calculator. This tool
+            provides: body fat percentage for women, body fat percentage for men. This body fat calculator is based on
+            the body fat algorithms developed by the U.S. Navy, U.S. Army, U.S. Marine Corp and the YMCA.
+            When people hear the term "body fat percentage", they normally associate the term with professional
+            bodybuilders. This is because much ado is made about low body in body building circles. Professionals must
+            have a very low body fat percentage (5% or so) in order to compete. While this raises awareness towards
+            developing low body fat, it also creates a somewhat limited perception. Body fat percentage means different
+            things on different levels. Actually, 5% body fat can cause serious health problems for the average person.
+            Conversely, 25% fat can either be healthy or unhealthy depending upon your age and gender. In order to
+            provide clarity, it's best to look at a scale of body fat percentages and what they represent.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>About this Body Fat Calculator</h4>
+
+        <p>
+            The calculated body fat percentage tells you how match of your body is fat.<br/>
+            This body fat calculator uses the <a
+                href="https://en.wikipedia.org/wiki/Body_fat_percentage#Anthropometric_methods">Navy Method</a> to
+            determine your Body Fat Percentage.<br/>
+            This Calculator has a 3% accuracy.<br/>
+            If you feel like your body fat percentage is higher or lower than it should be and/or you are obese or
+            underweight, please seek medical advice.
+            The body fat percentage of a human or other living being is the total mass of fat divided by total body
+            mass; body fat includes essential body fat and storage body fat. Essential body fat is necessary to maintain
+            life and reproductive functions. The percentage of essential body fat for women is greater than that for
+            men, due to the demands of childbearing and other hormonal functions. The percentage of essential fat is
+            3-5% in men, and 8-12% in women (referenced through NASM). Storage body fat consists of fat accumulation
+            in adipose tissue, part of which protects internal organs in the chest and abdomen. The minimum recommended
+            total body fat percentage exceeds the essential fat percentage value reported above. A number of methods are
+            available for determining body fat percentage, such as measurement with calipers or through the use of
+            bioelectrical impedance analysis.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I interpret my BMR?</h4>
+
+        <p>
+            A body fat percentage of 10-13% for women and 2-5% for men is considered essential.<br/>
+            14-20% for women and 6-13% for men is considered athletic.<br/>
+            21-24% for women and 14-17% for men is considered fit.<br/>
+            25-31% for women and 18-24% for men is considered average.<br/>
+            Everything above 32% for women and 25% for men is considered obese.<br/>
+            Source: <a href="https://en.wikipedia.org/wiki/Body_fat_percentage#Typical_body_fat_amounts">Wikipedia</a>.
+            The body fat percentage is a measure of fitness level, since it is the only body measurement which directly
+            calculates a person's relative body composition without regard to height or weight. The widely used body
+            mass index (BMI) provides a measure that allows the comparison of the adiposity of individuals of different
+            heights and weights. While BMI largely increases as adiposity increases, due to differences in body
+            composition, other indicators of body fat give more accurate results; for example, individuals with greater
+            muscle mass or larger bones will have higher BMIs.
+        </p>
+    </div>
+</div>
+
+
+

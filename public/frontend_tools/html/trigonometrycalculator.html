@@ -1,0 +1,443 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        $scope.triangle = Triangle();
+        $scope.unit = "degree";
+
+        var angleFactor;
+        $scope.calculate = function () {
+            triangle = $scope.triangle;
+            triangle.error = undefined;
+
+            if($scope.unit === "degree"){
+                angleFactor = Math.PI / 180;
+            } else {
+                angleFactor = 1;
+            }
+
+            if (triangle.validate()) {
+                calculateRemainingParameters(triangle);
+            }
+        }
+
+        $scope.reset = function () {
+            $scope.unit = "degree";
+            $scope.triangle = Triangle();
+        }
+
+        function Triangle() {
+            return {
+                //Counter-Clockwise (The side to the right is the next one)
+                sides: [
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    },
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    },
+                    {
+                        edge: undefined,
+                        angle: undefined //angle opposite of the edge
+                    }
+
+                ],
+                error: undefined,
+
+                //Clockwise
+                rotate: function (steps) {
+                    this.sides.unshift.apply(this.sides, this.sides.splice(steps, this.sides.length));
+                    return this.sides;
+                },
+                validate: function () {
+                    var angleTotal = 0;
+                    var parameter = 0;
+                    for (var i = 0; i < this.sides.length; i++) {
+                        if (validateDecimal(this.sides[i].edge) && this.sides[i].edge !== 0) {
+                            parameter++;
+                        }
+                        if (validateDecimal(this.sides[i].angle) && this.sides[i].angle !== 0) {
+                            parameter++;
+                            angleTotal += (this.sides[i].angle * angleFactor);
+                        }
+                    }
+
+                    if (parameter !== 3) {
+                        this.error = 'You have to provide exactly 3 valid values. Click Clear to clear the form.';
+                        return false;
+                    } else if ((angleTotal > Math.PI)) {
+                        this.error = 'The angles exceed 180 degree (Or ~3.1416 rad). Click Clear to clear the form.';
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+
+        var calculateRemainingParameters = function (triangle) {
+
+            var conditions = [isSAS, isSSS, isASA, isSAA, isAAS, isSSA, isASS];
+            var functions = [fromSAS, fromSSS, fromASA, fromSAA, fromAAS, fromSSA, fromASS];
+
+            //First: Determine what congruency criteria the triangle-object represents
+            var t;
+            for (var i = 0; i < conditions.length; i++) {
+                if ((t = contains(triangle, conditions[i]))) {
+                    functions[i](t);
+                    if(t.sides[0].edge && t.sides[1].edge && t.sides[2].edge
+                    && t.sides[0].angle && t.sides[1].angle && t.sides[2].angle){
+                        return;
+                    }
+                }
+            }
+            triangle.error = "Invalid inputs: No triangle can be generated."
+        };
+
+        var contains = function (triangle, condition) {
+            t = Triangle();
+            //We need a shallow copy of the initial sides to work with
+            t.sides = triangle.sides.slice();
+            //Rotate clockwise
+            var rotations = 0;
+            while (rotations < 3) {
+                //Test if it forms an SAS beginning from 0
+                if (condition(t)) {
+                    //congruency proven
+                    return t;
+                }
+                //Rotate to the next side
+                t.rotate(1);
+                rotations++;
+            }
+            return false;
+        };
+
+        //The following Methods test if the triangle fulfills any of the congruency criteria.
+        var isSAS = function (t) {
+            return t.sides[0].edge && t.sides[2].angle && t.sides[1].edge;
+        };
+        var isSSS = function (t) {
+            return t.sides[0].edge && t.sides[1].edge && t.sides[2].edge
+                    && ((t.sides[0].edge + t.sides[1].edge) > t.sides[2].edge)
+                    && ((t.sides[0].edge + t.sides[2].edge) > t.sides[1].edge)
+                    && ((t.sides[2].edge + t.sides[1].edge) > t.sides[0].edge);
+        };
+        var isASA = function (t) {
+            return t.sides[0].edge && t.sides[1].angle && t.sides[2].angle;
+        };
+        var isSAA = function (t) {
+            //angle to the right of the edge
+            return t.sides[0].edge && t.sides[2].angle && t.sides[0].angle;
+        };
+        var isAAS = function (t) {
+            //Basically the same as SAA but the angle is on the left side of the edge
+            return t.sides[0].edge && t.sides[1].angle && t.sides[0].angle;
+        };
+        var isSSA = function (t) {
+            //This one is a little more complicated
+            return t.sides[0].edge && t.sides[1].edge && t.sides[0].angle;
+        };
+        var isASS = function (t) {
+            //Same as SSA but the longer edge is on the left
+            return t.sides[0].edge && t.sides[2].edge && t.sides[0].angle;
+        };
+
+        //From-functions
+        var fromSAS = function (triangle) {
+            var a = triangle.sides[0].edge;
+            var b = triangle.sides[1].edge;
+            var C = triangle.sides[2].angle;
+
+            var c = locToEdge(a, b, C);
+            //Choose the smaller angle (opposite of the smaller side)
+            if (a < b) {
+                var A = losToAngle(a, c, C);
+                var B = remainingAngle(A, C);
+            } else {
+                var B = losToAngle(b, c, C);
+                var A = remainingAngle(B, C);
+            }
+
+            triangle.sides[2].edge = c;
+            triangle.sides[1].angle = B;
+            triangle.sides[0].angle = A;
+
+            return triangle;
+        };
+        var fromSSS = function (triangle) {
+            var a = triangle.sides[0].edge;
+            var b = triangle.sides[1].edge;
+            var c = triangle.sides[2].edge;
+
+            var A = locToAngle(a, b, c);
+            var B = locToAngle(b, c, a);
+            var C = remainingAngle(A, B);
+
+            triangle.sides[0].angle = A;
+            triangle.sides[1].angle = B;
+            triangle.sides[2].angle = C;
+
+            return triangle;
+        };
+        var fromASA = function (triangle) {
+            var B = triangle.sides[1].angle;
+            var C = triangle.sides[2].angle;
+            var a = triangle.sides[0].edge;
+
+            var A = remainingAngle(B, C);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[0].angle = A;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromSAA = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var C = triangle.sides[2].angle;
+            var a = triangle.sides[0].edge;
+
+            var B = remainingAngle(C, A);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[1].angle = B;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromAAS = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var B = triangle.sides[1].angle;
+            var a = triangle.sides[0].edge;
+
+            var C = remainingAngle(B, A);
+            var b = losToEdge(B, a, A);
+            var c = losToEdge(C, a, A);
+
+            triangle.sides[2].angle = C;
+            triangle.sides[1].edge = b;
+            triangle.sides[2].edge = c;
+
+            return triangle;
+        };
+        var fromSSA = function (triangle) {
+
+            var A = triangle.sides[0].angle;
+            var b = triangle.sides[1].edge;
+            var a = triangle.sides[0].edge;
+
+            //First possibility
+            var B_1 = losToAngle(b, a, A);
+            var C_1 = remainingAngle(A, B_1);
+            var c_1 = losToEdge(C_1, a, A);
+
+            //second possibility
+            var B_2 = remainingAngle(B_1, 0);
+            var C_2 = remainingAngle(A, B_2);
+            var c_2 = losToEdge(C_2, a, A);
+
+            console.log(A);
+            console.log(b);
+            console.log(a);
+            console.log(losToAngle(b, a, A));
+
+            if (C_2 > 0 && B_2 > 0 && c_2 > 0) {
+                triangle.sides[2].angle = C_1.toFixed(4) + " or " + C_2.toFixed(4);
+                triangle.sides[1].angle = B_1.toFixed(4) + " or " + B_2.toFixed(4);
+                triangle.sides[2].edge = c_1.toFixed(4) + " or " + c_2.toFixed(4);
+            } else {
+                triangle.sides[2].angle = C_1;
+                triangle.sides[1].angle = B_1;
+                triangle.sides[2].edge = c_1;
+            }
+            return triangle;
+        };
+        var fromASS = function (triangle) {
+            var A = triangle.sides[0].angle;
+            var c = triangle.sides[2].edge;
+            var a = triangle.sides[0].edge;
+
+            //First possibility
+            var C_1 = losToAngle(c, a, A);
+            var B_1 = remainingAngle(A, C_1);
+            var b_1 = losToEdge(B_1, a, A);
+
+            //second possibility
+            var C_2 = remainingAngle(C_1, 0);
+            var B_2 = remainingAngle(A, C_2);
+            var b_2 = losToEdge(B_2, a, A);
+
+            if (C_2 > 0 && B_2 > 0 && b_2 > 0) {
+                triangle.sides[2].angle = C_1.toFixed(4) + " or " + C_2.toFixed(4);
+                triangle.sides[1].angle = B_1.toFixed(4) + " or " + B_2.toFixed(4);
+                triangle.sides[1].edge = b_1.toFixed(4) + " or " + b_2.toFixed(4);
+            } else {
+                triangle.sides[2].angle = C_1;
+                triangle.sides[1].angle = B_1;
+                triangle.sides[1].edge = b_1;
+            }
+            return triangle;
+        };
+
+        //law of sines; returning an angle
+        var losToAngle = function (a, b, B) {
+            return Math.round((Math.asin(Math.sin(B * angleFactor) * a / b) / angleFactor) * 1000) / 1000;
+        };
+        //law of sines; returning an edge
+        var losToEdge = function (A, b, B) {
+            return Math.round((b * Math.sin(A  * angleFactor) / Math.sin(B * angleFactor)) * 1000) / 1000;
+        };
+        //law of cosines; returning an angle
+        var locToAngle = function (a, b, c) {
+            return Math.round((Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c)) / angleFactor) * 1000) / 1000;
+        };
+        //law of cosines; returning an edge
+        var locToEdge = function (a, b, C) {
+            return Math.round((Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) - 2 * a * b * Math.cos(C  * angleFactor))) * 1000) / 1000;
+        };
+        //law of 180 degree in a triangle; returning remaining angle
+        var remainingAngle = function (A, B) {
+            return Math.round(((Math.PI / angleFactor) - A - B) * 1000) / 1000;
+        };
+    });
+</script>
+<style>
+    .inline {
+        padding: 10px !important;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+    }
+
+    .label {
+        width: 50px !important;
+    }
+
+    #form-wrapper {
+        text-align: center;
+    }
+
+    .radio {
+        display: inline-block !important;
+    }
+
+
+</style>
+<sharebar></sharebar>
+<h1>Trigonometry Calculator</h1>
+<div ng-controller="toolController">
+    <div id="form-wrapper">
+        <div>
+            <img src="../../media/triangle.png" alt="triangle with angles and lengths marked with letters"/>
+        </div>
+
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Fill out <b>three</b> fields (at least one length) and click calculate. (90&#176; or &#126;1.5708
+                    rad for a right angle)
+                </legend>
+                <fieldset class="inline">
+                    <legend>Lengths</legend>
+                    <div class="pure-control-group">
+                        <label for="_a" class="label">a</label>
+                        <input id="_a" type="number" step="any" placeholder="a" ng-model="triangle.sides[0].edge"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="_b" class="label">b</label>
+                        <input id="_b" type="number" step="any" placeholder="b" ng-model="triangle.sides[1].edge"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="_c" class="label">c</label>
+                        <input id="_c" type="number" step="any" placeholder="c" ng-model="triangle.sides[2].edge"/>
+                    </div>
+                </fieldset>
+                <fieldset class="inline">
+                    <legend>Angles</legend>
+                    <div class="pure-control-group">
+                        <label for="A" class="label">A</label>
+                        <input id="A" type="number" step="any" placeholder="A" ng-model="triangle.sides[0].angle"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="B" class="label">B</label>
+                        <input id="B" type="number" step="any" placeholder="B" ng-model="triangle.sides[1].angle"/>
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="C" class="label">C</label>
+                        <input id="C" type="number" step="any" placeholder="C" ng-model="triangle.sides[2].angle"/>
+                    </div>
+                    <div>
+                        <label for="degree" class="radio">
+                            <input id="degree" type="radio" value="degree" name="degree" ng-model="unit" checked>
+                            Degree
+                        </label>
+                        <label for="radian" class="radio">
+                            <input id="radian" type="radio" value="radian" name="radian" ng-model="unit">
+                            Radian
+                        </label>
+                    </div>
+                </fieldset>
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <alert my-context="triangle"></alert>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I use this trigonometry calculator?</h4>
+        <p>
+            Enter at least three values, of which as least one is an length (the lowercase letters, because if there is no length then there is no way of determining the size of the triangle) and click calculate.<br/>
+            If a valid triangle can be generated, the Trig solver will calculate the rest of the variables, which will be shown in the input fields. If no triangle can be generated, an error message will be shown.<br/>
+            If you want to calculate a right triangle, just enter a right angle and to other values (again, one of them has to be an length).<br/>
+            If you have no length and only two angles, just input a random length (e.g. 1) to calculate the third angle.<br/>
+            If you want to use radians instead of degrees, just select radians.
+            This trigonometry calculator is incredibly easy to use.
+            Just type a number in the input box and then click any of the 12 buttons and you will have your answer. Please, give it a try.
+            Answers are displayed in scientific notation with the number of significant figures you specify in the box above.
+            For easier readability, numbers between .001 and 1,000 will not be in scientific notation.
+            Most browsers, will display the answers properly but there are a few browsers that will show no output whatsoever. If so, enter a zero in the box above which eliminates all formatting but it is better than seeing no output at all.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>About this trigonometry calculator</h4>
+        <p>
+            Trigonometric calculations can be hard and time consuming.<br/>
+            This site solves that problem by providing a simple, easy to use trig (short for triangle or trigonometric) solver (or calculator).<br/>
+            It supports all valid combinations of parameters (lengths and angles) out of which a triangle can be generated and uses the
+            law of cosines, law of sines and the law of 180 degrees in a triangle to calculate the remaining parameters.<br/>
+            And, no matter how many calculations you do and how many triangles you solve, it will always stay free.
+            Why is the calculator saying there's an error when there shouldn't be?
+            The most frequent reason for this is because you are rounding the sides and angles which can, at times , lead to results that seem inaccurate. In these cases , in actuality , the calculator is really producing correct results. However, it is then rounding them for you- which leads to seemingly inaccurate results and possible error warnings . To see if that is your problem, set the rounding to maximum accuracy.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>About trigonometry</h4>
+        <p>
+            Trigonometry (from Greek trigonon, "triangle" and metron, "measure") is a branch of mathematics that studies relationships involving lengths and angles of triangles.<br/>
+            The field emerged in the Hellenistic world during the 3rd century BC from applications of geometry to astronomical studies.<br/>
+            Trigonometry is most simply associated with planar right-angle triangles (each of which is a two-dimensional triangle with one angle equal to 90 degrees).
+            The applicability to non-right-angle triangles exists, but, since any non-right-angle triangle (on a flat plane) can be bisected to create two right-angle triangles, most problems can be reduced to calculations on right-angle triangles.<br/>
+            Source: <a href="https://en.wikipedia.org/wiki/Fraction_(mathematics)">Wikipedia</a>
+            In trigonometry, the law of sines, sine law, sine formula, or sine rule is an equation relating the lengths of the sides of any shaped triangle to the sines of its angles.
+            In trigonometry, the law of cosines (also known as the cosine formula or cosine rule) relates the lengths of the sides of a triangle to the cosine of one of its angles.
+        </p>
+    </div>
+</div>
+
+

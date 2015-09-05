@@ -1,0 +1,189 @@
+<script type="text/javascript-lazy">
+    var app = angular.module('ctw');
+    app.controllerProvider.register('toolController', function ($scope) {
+        var initial = {
+            amount: undefined,
+            vat: undefined,
+            include: "include",
+
+            result: undefined,
+            error: undefined
+        }
+
+        $scope.vat = angular.copy(initial);
+        $scope.calculate = function () {
+
+            //Exclude or Add Vat, evtl. dropdown combobox
+            var scope = $scope.vat;
+            if (validateDecimal(scope.amount) && validateDecimal(scope.percentage)) {
+                scope.result = {
+                    gross: undefined,
+                    net: undefined,
+                    vat: undefined
+                };
+
+                if (scope.include === "include") {
+                    scope.result.net = (scope.amount).toFixed(2);
+                    scope.result.vat = (scope.amount * (scope.percentage / 100)).toFixed(2);
+                    scope.result.gross = (scope.amount * 1 + scope.result.vat * 1).toFixed(2);
+                } else if (scope.include === "exclude") {
+                    scope.result.gross = (scope.amount).toFixed(2);
+                    scope.result.net = (scope.amount / (1 + (scope.percentage / 100))).toFixed(2);
+                    scope.result.vat = (scope.result.gross - scope.result.net).toFixed(2);
+
+                } else {
+                    scope.error = "Please select include or exclude";
+                    return;
+                }
+            } else {
+                scope.error = 'Missing or invalid Input';
+            }
+        }
+        $scope.reset = function () {
+            $scope.vat = angular.copy(initial);
+        }
+
+        var validateDecimal = function (decimal) {
+            decimal = parseFloat(decimal);
+            return angular.isNumber(decimal) && isFinite(decimal);
+        }
+    })
+    ;
+</script>
+<style>
+    #form-wrapper {
+        text-align: center;
+    }
+
+    .radio {
+        display: inline-block !important;
+        padding: 10px 0;
+    }
+</style>
+<sharebar></sharebar>
+<h1>VAT & Tax Calculator</h1>
+<div ng-controller="toolController">
+    <div id="form-wrapper">
+        <form class="pure-form pure-form-aligned" novalidate>
+            <fieldset>
+                <legend>Type in the amount and the VAT and select include or exclude</legend>
+                <div class="pure-control-group">
+                    <label for="amount" class="label">Amount</label>
+                    <input id="amount" type="number" step="any" placeholder="amount"
+                           ng-model="vat.amount"/>
+                </div>
+                <div class="pure-control-group">
+                    <label for="percentage" class="label">Tax rate (%)</label>
+                    <input id="percentage" type="number" step="any" placeholder="%" ng-model="vat.percentage"/>
+                </div>
+                <div id="radios">
+                    <label for="include" class="radio">
+                        <input id="include" type="radio" value="include" name="include" ng-model="vat.include" checked>
+                        include
+                    </label>
+                    <label for="exclude" class="radio">
+                        <input id="exclude" type="radio" value="exclude" name="exclude" ng-model="vat.include">
+                        exclude
+                    </label>
+                </div>
+                <div>
+                    <button class="pure-button pure-button-primary" ng-click="calculate()">Calculate
+                    </button>
+                    <button class="pure-button" type="reset" ng-click="reset()">Clear
+                    </button>
+                </div>
+                <alert my-context="vat"></alert>
+            </fieldset>
+        </form>
+    </div>
+    <div ng-show="vat.result">
+        <table class="pure-table">
+            <tr class="pure-table-even">
+                <td>
+                    Net (without VAT):
+                </td>
+                <td>
+                    {{vat.result.net}}
+                </td>
+            </tr>
+            <tr class="pure-table-odd">
+                <td>
+                    VAT:
+                </td>
+                <td>
+                    {{vat.result.vat}}
+                </td>
+            </tr>
+            <tr class="pure-table-even">
+                <td>
+                    Gross (with VAT):
+                </td>
+                <td>
+                    {{vat.result.gross}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr/>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>How do I use this VAT calculator?</h4>
+
+        <p>
+            Enter the amount of your bill etc., enter the tax rate and choose if you want to get the gross amount
+            (include VAT) or net amount (exclude VAT).<br/>
+            The VAT calculator will then show you the amount of tax or VAT, net and gross amount.
+            A value-added tax (VAT) or also General Sales tax (GST) is a form of consumption tax. From the perspective
+            of the buyer, it is a tax on the purchase price. From that of the seller, it is a tax only on the value
+            added to a product, material, or service, from an accounting point of view, by this stage of its manufacture
+            or distribution. The manufacturer remits to the government the difference between these two amounts, and
+            retains the rest for themselves to offset the taxes they had previously paid on the inputs.
+            The value added to a product by or with a business is the sale price charged to its customer, minus the cost
+            of materials and other taxable inputs. A VAT is like a sales tax in that ultimately only the end consumer is
+            taxed. It differs from the sales tax in that, with the latter, the tax is collected and remitted to the
+            government only once, at the point of purchase by the end consumer. With the VAT, collections, remittances
+            to the government, and credits for taxes already paid occur each time a business in the supply chain
+            purchases products.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>Who should use this calculator?</h4>
+
+        <p>
+            If you want to work out the net amount from gross or the gross amount from net and you know the tax rate (or
+            VAT) involved, this tax and VAT calculator is the right choice for you.<br/>
+            Please remember that I cannot guarantee 100% accuracy.
+            A tax (from the Latin taxo; "rate") is a financial charge or other levy imposed upon a taxpayer (an
+            individual or legal entity) by a state or the functional equivalent of a state to fund various public
+            expenditures. A failure to pay, or evasion of or resistance to taxation, is usually punishable by law.
+            Taxes are also imposed by many administrative divisions. Taxes consist of direct or indirect taxes and may
+            be paid in money or as its labour equivalent. Few countries impose no taxation at all, such as the United
+            Arab Emirates and the kingdom of Saudi Arabia.
+        </p>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-3 text">
+        <h4>About this calculator</h4>
+
+        <p>
+            This tax rate calculator uses the formulas presented on <a href="https://en.wikipedia.org/wiki/Tax_rate">Wikipedia</a>
+            to calculate the net, gross and tax amount.
+            The tax rate describes the ration, expressed in percent, at which is business or individual is taxed. These
+            rates can be presented using different definitions applied to a tax base: inclusive and exclusive.
+            The VAT rate for the UK currently stands at 20 per cent, this was changed from 17.5 per cent on the 4th of
+            January 2011. The standard rate of VAT was temporarily reduced to 15 per cent on 1 December 2008. This was
+            put back to 17.5% on the 20th January 2010.
+            VAT - or Value Added Tax - is charged by businesses at the point of sale of goods and services sold in the
+            UK and the Isle of Man. Basically it is a tax on business transactions.
+            Value Added Tax was introduced in 1973 as a replacement for Purchase Tax and Selective Employment Tax, as a
+            condition of UK entry into the European Economic Community.
+            The reduction in the standard rate of VAT from 17.5% to 15% was prompted by the recent financial turmoil in
+            the global financial system in 2008 and increased to 20% in January 2011. The Chancellor stated that the
+            temporary reduction would last for 13 months before returning to 17.5 per cent in January 2010.
+            The Chancellor stated in his 2008 Pre-Budget report that "This temporary reduction is the equivalent of the
+            Government giving back some 12 and a half billion pounds to consumers to boost the economy."
+        </p>
+    </div>
+</div>
+
+
