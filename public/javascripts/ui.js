@@ -30,7 +30,7 @@
 
 var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location, $window) {
     $rootScope.$on('$routeChangeSuccess', function () {
-        $window.ga('send', 'pageview', {page: $location.path()});
+        $window.ga('send', 'pageview', {page: angular.lowercase($location.path())});
     });
     $rootScope.selectCategory = function (category) {
         if ($rootScope.selectedCategory === category) {
@@ -43,7 +43,7 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
     $rootScope.selectTool = function (tool) {
         for (var i = 0; i < $rootScope.categories.length; i++) {
             for (var j = 0; j < $rootScope.categories[i].tools.length; j++) {
-                if ($rootScope.categories[i].tools[j].path === tool) {
+                if (angular.lowercase($rootScope.categories[i].tools[j].path) === angular.lowercase(tool)) {
                     $rootScope.selectedCategory = $rootScope.categories[i];
                     $rootScope.selectedTool = $rootScope.categories[i].tools[j];
                 }
@@ -86,7 +86,8 @@ app.controller('contentController', function ($scope, $routeParams, $rootScope, 
 
 
     if ($routeParams.tool) {
-        $scope.toolUrl = '/frontend_tools/html/' + $routeParams.tool + '.html';
+        $scope.toolUrl = '/frontend_tools/html/' + angular.lowercase($routeParams.tool) + '.html';
+        console.log($scope.toolUrl);
     } else {
         $scope.toolUrl = '/html/main.html';
         $rootScope.selectedCategory = undefined;
@@ -94,13 +95,11 @@ app.controller('contentController', function ($scope, $routeParams, $rootScope, 
     }
 });
 
-//Controlls static content
 app.controller('staticController', function ($scope, $rootScope, $sce) {
 
     $rootScope.selectedCategory = undefined;
     $rootScope.selectedTool = undefined;
 });
-
 app.controller('feedbackController', function ($scope, $rootScope, $http, $sce) {
     $rootScope.selectedCategory = 'feedback';
     $rootScope.selectedTool = undefined;
@@ -125,15 +124,18 @@ app.config(function ($routeProvider, $locationProvider, $controllerProvider) {
     $routeProvider
         .when('/about', {
             templateUrl: 'html/about.html',
-            controller: 'staticController'
+            controller: 'staticController',
+            caseInsensitiveMatch: true
         })
         .when('/tos', {
             templateUrl: 'html/tos.html',
-            controller: 'staticController'
+            controller: 'staticController',
+            caseInsensitiveMatch: true
         })
         .when('/feedback', {
             templateUrl: 'html/feedback.html',
-            controller: 'feedbackController'
+            controller: 'feedbackController',
+            caseInsensitiveMatch: true
         })
         .when('/:tool?', {
             templateUrl: 'html/tool_wrapper.html',
