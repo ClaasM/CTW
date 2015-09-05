@@ -7,13 +7,13 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/InvestmentCalculator</loc>
+    <loc>http://www.yourcalculator.org/investmentcalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/BMRCalculator</loc>
+    <loc>http://www.yourcalculator.org/bmrcalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -25,25 +25,25 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/TrigonometryCalculator</loc>
+    <loc>http://www.yourcalculator.org/trigonometrycalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/FractionCalculator</loc>
+    <loc>http://www.yourcalculator.org/fractioncalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/Multiplier</loc>
+    <loc>http://www.yourcalculator.org/multiplier</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/VATCalculator</loc>
+    <loc>http://www.yourcalculator.org/vatcalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -55,25 +55,25 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/PercentageCalculator</loc>
+    <loc>http://www.yourcalculator.org/percentagecalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/BodyFatCalculator</loc>
+    <loc>http://www.yourcalculator.org/bodyfatcalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/LoanCalculator</loc>
+    <loc>http://www.yourcalculator.org/loancalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/TipCalculator</loc>
+    <loc>http://www.yourcalculator.org/tipcalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -85,7 +85,7 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>http://www.yourcalculator.org/BMICalculator</loc>
+    <loc>http://www.yourcalculator.org/bmicalculator</loc>
     <lastmod>2015-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>

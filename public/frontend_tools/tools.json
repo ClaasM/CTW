@@ -4,25 +4,25 @@
     "tools": [
       {
         "name": "Fraction Calculator",
-        "path": "FractionCalculator",
+        "path": "fractioncalculator",
         "description":"Calculate & convert fractions, mixed fractions and decimals with the fraction calculator & converter at YourCalculator.org!",
         "keywords": "calculator fraction mixed decimal add subtract multiply divide converter"
       },
       {
         "name": "Percentage Calculator",
-        "path": "PercentageCalculator",
+        "path": "percentagecalculator",
         "description":"Calculate percentages, percentage increase or decrease, total amounts and more with the percentage calculator at YourCalculator.org!",
         "keywords": "calculator percent percentage of amount increase decrease growth calculation calculate weight discount how to"
       },
       {
         "name": "Trigonometry Calculator",
-        "path": "TrigonometryCalculator",
+        "path": "trigonometrycalculator",
         "description":"Calculate lengths and angles of a triangle out of 3 (or two for right triangles) parameters with the trigonometry calculator at YourCalculator.org!",
         "keywords": "calculator solver trig triangle trigonometry degree radian angle lengths"
       },
       {
         "name": "Multiplier",
-        "path": "Multiplier",
+        "path": "multiplier",
         "description":"Multiply numbers (factors) and calculate their result with the Multiplier at YourCalculator.org!",
         "keywords": "calculator multiplier multiplication factor"
 
@@ -34,25 +34,25 @@
     "tools": [
       {
         "name": "Investment Calculator",
-        "path": "InvestmentCalculator",
+        "path": "investmentcalculator",
         "description":"Calculate the future value and the ROI of your investment or savings account for free with the compound interest investment & savings calculator at YourCalculator.org!",
         "keywords": "roi return on investment fv future value annuity savings 401k retirement account compound interest deposit calculator"
       },
       {
         "name": "Loan Calculator",
-        "path": "LoanCalculator",
+        "path": "loancalculator",
         "description":"Calculate the monthly payment, how much you pay in total and how much of that is interest for free with the loan and mortgage calculator at YourCalculator.org!",
         "keywords": "mortgage loan lease borrow finance calculator"
       },
       {
         "name": "Tip Calculator",
-        "path": "TipCalculator",
+        "path": "tipcalculator",
         "description":"Add a tip to your bill and split it using the Tip Calculator at YourCalculator.org!",
         "keywords": "tip calculator how much to adding service bill split"
       },
       {
         "name": "VAT Calculator",
-        "path": "VATCalculator",
+        "path": "vatcalculator",
         "description":"Add or subtract tax rate & VAT using the VAT & tax Calculator at YourCalculator.org!",
         "keywords": "vat tax bill net gross calculator include exclude"
       }
@@ -63,20 +63,20 @@
     "tools": [
       {
         "name": "BMI Calculator",
-        "path": "BMICalculator",
+        "path": "bmicalculator",
         "description":"Calculate your BMI (Body Mass Index) at YourCalculator.org! Free, for men, women, teens and children! Use the Imperial or Metric System.",
         "keywords": "BMI Body Mass Index Calculator Imperial Metric"
       },
       {
         "name": "BMR & Calorie Calculator",
-        "path": "BMRCalculator",
+        "path": "bmrcalculator",
         "description":"Calculate your BMR (Basal Metabolic Rate) at YourCalculator.org! See how much calories you need to lose, gain or maintain weight! Free, for men, women, teens and children! Use the Imperial or Metric System.",
         "keywords": "BMR Basal RMR Metabolic Calculator Imperial Metric women men"
       },
 
       {
         "name": "Body Fat Calculator",
-        "path": "BodyFatCalculator",
+        "path": "bodyfatcalculator",
         "description":"Calculate your Body Fat Percentage at YourCalculator.org! Calculate how much fat your body consists of using the official Navy method! Free, for men and women! Use the Imperial or Metric System.",
         "keywords": "Body Fat Percentage Calculator Imperial Metric women men"
       }
