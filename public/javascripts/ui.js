@@ -27,7 +27,6 @@
     }
 }());
 
-
 var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $sce, $location, $window) {
     $rootScope.$on('$routeChangeSuccess', function () {
         $window.ga('send', 'pageview', {page: angular.lowercase($location.path())});
@@ -68,7 +67,6 @@ var app = angular.module('ctw', ['ngRoute']).run(function ($http, $rootScope, $s
         });
 });
 
-
 app.controller('contentController', function ($scope, $routeParams, $rootScope, $sce) {
     $scope.$on('$includeContentRequested', function (angularEvent, src) {
         $scope.loading = true;
@@ -94,7 +92,6 @@ app.controller('contentController', function ($scope, $routeParams, $rootScope, 
         $rootScope.selectedTool = undefined;
     }
 });
-
 app.controller('staticController', function ($scope, $rootScope, $sce) {
 
     $rootScope.selectedCategory = undefined;
@@ -179,7 +176,6 @@ app.directive('script', function () {
         }
     };
 });
-
 app.directive('sharebar', function ($location, $http, $rootScope) {
     return {
         restrict: 'E',
@@ -212,7 +208,6 @@ app.directive('sharebar', function ($location, $http, $rootScope) {
         }
     };
 });
-
 app.directive('alert', function ($location, $http, $rootScope) {
     return {
         restrict: 'E',
